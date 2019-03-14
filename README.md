@@ -4,6 +4,9 @@ Main project repo for spring 2019 CS3502 course project
 The Dev-Intellij Branch allows you to import the OS_Project folder into a new IntelliJ project and run/test classes
 The Master branch only contains the individual java classes and cannot be run in an IntelliJ project
 
+# When pushing to this project...
+Do not stage or push any changes to files in your .idea folder. Only push .java class files.
+
 # To Open the IntelliJ Project
 1. Clone the repo
 2. By default you will be on the Master branch 
