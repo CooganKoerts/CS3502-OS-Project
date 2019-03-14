@@ -1,3 +1,0 @@
-//Dispatcher
-public class Dispatcher {
-}
