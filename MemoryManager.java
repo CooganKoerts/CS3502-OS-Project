@@ -20,9 +20,11 @@ public class MemoryManager {
         return memory.getDiskSize();
     }
 
-    public void writeTORegister() { }
+    public void writeTORegister(int n, int value) {
+        registers[n] = value;
+    }
+
     public void writeToRAM() { }
     public void writeToDisk() { }
-
 
 }
