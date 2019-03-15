@@ -7,13 +7,7 @@ public class Loader {
     LinkedList<ProcessControlBlock> queue;
     Disk disk;
 
-    // This is here for running and testing this class' methods
-    public void main(String args[])
-    {
-        readProgramFile();
-    }
-
-    private void readProgramFile()
+    public void readProgramFile()
     {
         String attributes = "";
         BufferedReader reader;
@@ -61,7 +55,7 @@ public class Loader {
     Add Process Control block for new process to queue object
     String format: // JOB a b c // Data d e f
      */
-    private void addJobToPCB(String data)
+    public void addJobToPCB(String data)
     {
         String jobID;
         String numOfWords;
