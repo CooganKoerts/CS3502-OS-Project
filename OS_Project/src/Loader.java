@@ -7,6 +7,12 @@ public class Loader {
     LinkedList<ProcessControlBlock> queue;
     Disk disk;
 
+    /*public static void main(String args[])
+    {
+        Loader l = new Loader();
+        l.readProgramFile();
+    }*/
+
     public void readProgramFile()
     {
         String attributes = "";
@@ -15,7 +21,7 @@ public class Loader {
         {
             reader = new BufferedReader(new FileReader("ProgramFile.txt"));
             String line = reader.readLine();
-            while (line != null)
+            while ((line = reader.readLine()) != null)
             {
                 /*
                 When line contains // check for:
@@ -27,20 +33,19 @@ public class Loader {
                 {
                     if (line.contains("JOB"))
                     {
+                        attributes = ""; // reset attributes
                         attributes = line + " ";
                     }
-                    else if (line.contains("Data"))
+                    else if (line.contains("Data") && !attributes.equals(""))
                     {
                         attributes += line;
                         addJobToPCB(attributes);
-                        attributes = ""; // reset attributes
                     }
                 }
-                else if (!line.contains("//"))
+                else
                 {
-                    disk.addToDisk(line);
+                    //disk.addToDisk(line);
                 }
-                line = reader.readLine(); // reads next line
             }
 
         }
@@ -65,7 +70,10 @@ public class Loader {
         String tempBuff;
 
         String[] splitLine = data.split("\\s+");
+
         jobID = splitLine[2];
+        int jobID_num = Integer.parseInt(jobID, 16); // example of converting hex to decimal
+
         numOfWords = splitLine[3];
         priority_num = splitLine[4];
         inputBuff = splitLine[7];
