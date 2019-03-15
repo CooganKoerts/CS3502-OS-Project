@@ -1,29 +1,29 @@
 /*
-
     This class builds the registers that will be used by the operating system
-
+    and accesses RAM and the hard-drive disk
+    This program will be used to load processes into the hard-drive disk simulator
  */
 
 public class Memory {
-    private int[] registers;
-    private char[] disk; //TODO
-    //Ram ram; //TODO
-    //TODO: simulated RAM & simulated hard drive called 'disk'
+    private int[] registers = new int[10];
+    private static Disk disk = new Disk();
+    private static Object[] memoryAddresses;
+    //Ram ram; //
+    //TODO: simulated RAM
 
-    public Memory() {
-    }
 
-    public Memory(int numOfRegisters) {
-        registers = new int[numOfRegisters];
-        //disk
-        //ram
+    //Memory takes two parameters n & k for the number of registers and the number of memory addresses, respectively
+    public Memory(int n, int k) {
+        registers = new int[n];
+        memoryAddresses = new Object[k];
+
     }
 
     public int[] getRegisters() {
         return registers;
     }
 
-    public char[] getDisk() {
+    public Disk getDisk() {
         return disk;
     }
 
@@ -31,16 +31,12 @@ public class Memory {
         registers = new int[numOfRegisters];
     }
 
-    /* public void setDisk(char disk) {
-        //TODO
-    } */
-
     public int sizeOfMemory() {
         return registers.length;
     }
 
     public int getDiskSize() {
-        return disk.length;
+        return disk.diskSize();
     }
 
     public void writeToMemory(int memAddress, int n) {
