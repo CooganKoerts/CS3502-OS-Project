@@ -5,8 +5,8 @@ public class Process {
     private int processId;
     private String processName;
     private String processJob;
-    private int processSize;// generate random size in kb
-    private int processPriority; // generate random priority (1-3, 1 being highest priority 3 being lowest)
+    private int processSize;
+    private int processPriority;
 
     public Process(int processId, String processName, String processJob ,int processSize, int processPriority) {
         this.processId = processId;
