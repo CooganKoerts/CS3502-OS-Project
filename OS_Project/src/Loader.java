@@ -7,12 +7,6 @@ public class Loader {
     LinkedList<ProcessControlBlock> queue = new LinkedList<ProcessControlBlock>();
     Disk disk = new Disk();
 
-    public static void main(String args[])
-    {
-        Loader l = new Loader();
-        l.readProgramFile();
-    }
-
     public void readProgramFile()
     {
         String attributes = "";
@@ -46,7 +40,6 @@ public class Loader {
                 }
                 else
                 {
-                    System.out.println("ELSE: " + line);
                     disk.addToDisk(line);
                 }
             }
