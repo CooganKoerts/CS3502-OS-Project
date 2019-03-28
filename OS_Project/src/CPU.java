@@ -70,29 +70,28 @@ public class CPU
         return result;
     }
 
-    public int decode(String instruction) {
+    public void decode(String instruction) {
         String binary_instructions = hex_to_binary(instruction.substring(2));
         String temporary_instructions = binary_instructions;
         instant = Integer.parseInt(temporary_instructions.substring(0, 2));
         operationCode = hex_to_decimal(instruction.substring(2, 8));
 
-        switch(instant)
-        {
+        switch (instant) {
             case 00: {
-                temporary_sreg1 = binary_to_Integer(temporary_instructions.substring(8,12));
+                temporary_sreg1 = binary_to_Integer(temporary_instructions.substring(8, 12));
                 temporary_sreg2 = binary_to_Integer(temporary_instructions.substring(12, 16));
                 temporary_Dst_reg = binary_to_Integer(temporary_instructions.substring(16, 20));
                 break;
             }
 
-            case 01:{
+            case 01: {
                 temporary_breg = binary_to_Integer(temporary_instructions.substring(8, 12));
                 temporary_Dst_reg = binary_to_Integer(temporary_instructions.substring(12, 16));
                 temporary_address = binary_to_Integer(temporary_instructions.substring(16));
                 break;
             }
 
-            case 10:{
+            case 10: {
                 temporary_address = binary_to_Integer(temporary_instructions.substring(8));
                 break;
             }
@@ -108,6 +107,7 @@ public class CPU
             default: {
                 System.out.println("EXCEPTION: Invalid instruction type");
             }
+        }
     }
     
     public void execute() {}

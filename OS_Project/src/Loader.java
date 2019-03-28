@@ -4,14 +4,14 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 public class Loader {
-    LinkedList<ProcessControlBlock> queue;
-    Disk disk;
+    LinkedList<ProcessControlBlock> queue = new LinkedList<ProcessControlBlock>();
+    Disk disk = new Disk();
 
-    /*public static void main(String args[])
+    public static void main(String args[])
     {
         Loader l = new Loader();
         l.readProgramFile();
-    }*/
+    }
 
     public void readProgramFile()
     {
@@ -20,31 +20,34 @@ public class Loader {
         try
         {
             reader = new BufferedReader(new FileReader("ProgramFile.txt"));
-            String line = reader.readLine();
+            String line;
             while ((line = reader.readLine()) != null)
             {
                 /*
                 When line contains // check for:
                 // JOB hex hex hex
-                // END
+                instruct
                 // DATA hex hex hex
+                input data
+                // END
                  */
                 if (line.contains("//"))
                 {
                     if (line.contains("JOB"))
                     {
-                        attributes = ""; // reset attributes
                         attributes = line + " ";
                     }
                     else if (line.contains("Data") && !attributes.equals(""))
                     {
                         attributes += line;
+                        // Adds String
                         addJobToPCB(attributes);
                     }
                 }
                 else
                 {
-                    //disk.addToDisk(line);
+                    System.out.println("ELSE: " + line);
+                    disk.addToDisk(line);
                 }
             }
 
@@ -72,8 +75,6 @@ public class Loader {
         String[] splitLine = data.split("\\s+");
 
         jobID = splitLine[2];
-        int jobID_num = Integer.parseInt(jobID, 16); // example of converting hex to decimal
-
         numOfWords = splitLine[3];
         priority_num = splitLine[4];
         inputBuff = splitLine[7];
