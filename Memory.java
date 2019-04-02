@@ -8,7 +8,7 @@
  */
 
 public class Memory {
-    private int[] registers = new int[10];
+    private int[] registers = new int[16];
     private static Disk disk = new Disk();
     private static Object[] memoryAddresses;
     //Ram ram; //
