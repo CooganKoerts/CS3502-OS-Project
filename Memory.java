@@ -1,52 +1,20 @@
 /*
 
     This class builds the registers that will be used by the operating system
-    and accesses RAM and the hard-drive disk
+    and accesses RAM.
 
-    This program will be used to load processes into the hard-drive disk simulator
+    Note: This is the only class that can DIRECTLY access and manipulate the RAM.
 
  */
 
 public class Memory {
-    private int[] registers = new int[16];
-    private static Disk disk = new Disk();
-    private static Object[] memoryAddresses;
-    //Ram ram; //
-    //TODO: simulated RAM
+    // Simulated RAM, programs will be stored here based off priority
+    private static String[][] RAM = new String[32][];
 
+    // Write program from disk to RAM based off the physical address of the program
+    // stored on the disk.
 
-    //Memory takes two parameters n & k for the number of registers and the number of memory addresses, respectively
-    public Memory(int n, int k) {
-        registers = new int[n];
-        memoryAddresses = new Object[k];
-
-    }
-
-    public int[] getRegisters() {
-        return registers;
-    }
-
-    public Disk getDisk() {
-        return disk;
-    }
-
-    public void setRegisters(int numOfRegisters) {
-        registers = new int[numOfRegisters];
-    }
-
-    public int sizeOfMemory() {
-        return registers.length;
-    }
-
-    public int getDiskSize() {
-        return disk.diskSize();
-    }
-
-    public void writeToMemory(int memAddress, int n) {
-        if (memAddress >= sizeOfMemory()) {
-            System.out.println("No address available (Memory Address specified is too high)");
-        } else {
-            registers[memAddress] = n;
-        }
-    }
+    /*public static void writeToRAM(int address, int priority) {
+        RAM[0][0] = Loader.disk.getDiskMemory()[address][0];
+    } */
 }
