@@ -1,43 +1,39 @@
 /*
-    Disk class will be a disk object of an arrayList Data structures that will
-    act as a virtual hard drive and store process "jobs" as strings
-    process "jobs" will be stored on an arrayList of String objects and will be retrieved when it is time for the process to execute
- */
+    Disk class will be a disk object of a 2d array Data structures that will
+    act as a virtual hard drive and store a job's "words" as strings in each "block" .
 
-import java.util.ArrayList;
+    We disregarded the jobID, number of words, priority & Data buffers since those
+    will have all been added to a queue of PCBs with one unique PCB object for each Job.
+
+    The Jobs are loaded into the disk on a first come first serve basis and will be
+    scheduled by priority by the scheduler.
+ */
 
 public class Disk {
 
-    private static ArrayList<String> processes;
+    // The Disk object contains a 2d String array that is 32 x 256
+    // Each row is symbolic of a memory block
+    // There is supposed to be (2048 words * 4 bytes per word) 8192 bytes in size
+    // Each memory block (row) has an evenly split up amount of bytes (256).
+    private static String[][] memory = new String[32][256];
 
-    public Disk() {
-        processes = new ArrayList<String>();
+    public Disk() { }
+
+    public void addToDisk(int jobID, int index, String words) {
+        memory[jobID-1][index] = words;
     }
 
-    public void addToDisk(String job) {
-        processes.add(job);
+    public void removeFromDisk(int jobID) {
+        for (int i = 0; i < memory[jobID].length; i++){
+            memory[jobID][i] = null;
+        }
     }
 
-    public void removeFromDisk(String job) {
-        processes.remove(job);
+    public int diskSize() { return memory.length; }
+
+    public void setMemory(String[][] memory) {
+        this.memory = memory;
     }
 
-    public String accessDisk(String job) {
-        int indexOfJob = processes.indexOf(job);
-        String jobToBePulled = processes.get(indexOfJob);
-        processes.remove(indexOfJob);
-        return jobToBePulled;
-    }
-
-    public int diskSize() {
-        return processes.size();
-    }
-
-    public void setProcesses(ArrayList<String> processes) {
-        this.processes = processes;
-    }
-
-    public ArrayList<String> getProcesses() {
-        return processes;
-    }
+    public String[][] getDiskMemory() { return memory; }
 }
