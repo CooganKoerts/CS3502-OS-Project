@@ -8,12 +8,12 @@ public class ProcessControlBlock {
     String status; // "RUNNING", "READY", "BLOCKED", "NEW"
 
     /*
-        registers[] is an array representing the registers in the PCB that holds three values
+        registers[] is an array representing the registers in the PCB that holds three values:
         registers[0] = Location of "block"/row index that the Job is located in the RAM
         registers[1] = Location of the start of the "Data" portion of the program in the RAM
         registers[2] = Location of the end of the program in RAM
      */
-    int[] registers;
+    int[] registers = new int[3];
 
     public ProcessControlBlock(String job_id, String num_of_words, String _priority, String input_buffer_size,
                                String output_buffer_size, String temp_buffer_size)
@@ -25,6 +25,5 @@ public class ProcessControlBlock {
         this.outputBufferSize = output_buffer_size;
         this.tempBufferSize = temp_buffer_size;
         this.status = "NEW";
-        registers = new int[3];
     }
 }
