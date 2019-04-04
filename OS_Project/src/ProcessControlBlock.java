@@ -1,4 +1,5 @@
 public class ProcessControlBlock {
+
     String jobID; // hex number
     String numOfWords; // hex number
     String priority; // hex number
@@ -6,6 +7,9 @@ public class ProcessControlBlock {
     String outputBufferSize; // hex number
     String tempBufferSize; // hex number
 
+    /*
+    Initializing method used to initially add data from ProgramFile.txt
+     */
     public ProcessControlBlock(String job_id, String num_of_words, String _priority, String input_buffer_size,
                                String output_buffer_size, String temp_buffer_size)
     {
@@ -15,5 +19,33 @@ public class ProcessControlBlock {
         this.inputBufferSize = input_buffer_size;
         this.outputBufferSize = output_buffer_size;
         this.tempBufferSize = temp_buffer_size;
+    }
+
+    /*
+    Get Methods
+     */
+    public String getJobID()
+    {
+        return jobID;
+    }
+
+    public String getNumOfWords()
+    {
+        return numOfWords;
+    }
+
+    public String getPriority()
+    {
+        return priority;
+    }
+
+    public String getIBufferSize()
+    {
+        return inputBufferSize;
+    }
+
+    public String getTempBufferSize()
+    {
+        return tempBufferSize;
     }
 }

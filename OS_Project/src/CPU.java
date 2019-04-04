@@ -19,6 +19,14 @@ public class CPU
     private int cpuNumber;
     public int instant;
     public int operationCode;
+    /*
+     Addressing mode is a parameter for effective address computation
+     */
+    enum AddressingMode
+    {
+        Direct, Indirect;
+    }
+
 
     public CPU(int cpuNumber)
     {
@@ -112,5 +120,30 @@ public class CPU
     
     public void execute() {}
 
-    public void fetch() {}
+    /*
+    Notes for effective address method
+    // disk is 2048 words long
+    // ram is 1024 words long
+    // each word is 4 bytes & 8 hex chars
+    // The scheduler must note in the PCB, which physical addresses
+    // in RAM each program/job begins, and ends.
+    // This ‘start’ address must be stored in the base-register (or program-counter) of the job)
+    // store the start addresses of the input-buffer and output-buffer spaces allocated in RAM as well
+    // When a process is run, the base register is loaded with the physical location where the process begins in memory
+     */
+    
+    /*
+    Param AddressingMode a: Direct or Indirect
+    Param int base: when a job is scheduled and loaded into RAM, base will be the index in RAM (?)
+     */
+    public void effective_Addr(AddressingMode a, int base) {
+        if (a.equals(AddressingMode.Direct))
+        {
+
+        }
+        else if (a.equals(AddressingMode.Indirect))
+        {
+
+        }
+    }
 }
