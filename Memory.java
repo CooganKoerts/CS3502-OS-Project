@@ -62,13 +62,15 @@ public class Memory {
             RAM[blockToWrite][i] = Loader.disk.getDiskMemory()[jobID-1][i];
         }
 
-        // This loop sets the registers in the programs PCB and changes status to READY
+        // This loop sets the registers in the programs PCB
         for (int i = 0; i < Loader.queue.size(); i++) {
             if (jobID == hexToDec(Loader.queue.get(i).jobID)) {
-                Loader.queue.get(i).status = "READY";
                 Loader.queue.get(i).registers[0] = blockToWrite;
                 Loader.queue.get(i).registers[1] = hexToDec(Loader.queue.get(i).numOfWords);
                 Loader.queue.get(i).registers[2] = RAM[blockToWrite].length-1;
+                Loader.queue.get(i).registers[3] = hexToDec(Loader.queue.get(i).numOfWords);
+                Loader.queue.get(i).registers[4] = Loader.queue.get(i).registers[3] + hexToDec(Loader.queue.get(i).inputBufferSize);
+                Loader.queue.get(i).registers[5] = Loader.queue.get(i).registers[4] + hexToDec(Loader.queue.get(i).outputBufferSize);
             }
         }
     }
