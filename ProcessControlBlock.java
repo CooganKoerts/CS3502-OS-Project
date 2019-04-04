@@ -1,3 +1,7 @@
+/*
+    Queue of PCBs initialized in Loader
+ */
+
 public class ProcessControlBlock {
     String jobID; // hex number
     String numOfWords; // hex number
@@ -5,10 +9,11 @@ public class ProcessControlBlock {
     String inputBufferSize; // hex number
     String outputBufferSize; // hex number
     String tempBufferSize; // hex number
+
     String status; // "RUNNING", "READY", "BLOCKED", "NEW"
 
     /*
-        registers[] is an array representing the registers in the PCB that holds three values:
+        registers[ ] is an array representing the registers in the PCB that holds three values:
         registers[0] = Location of "block"/row index that the Job is located in the RAM
         registers[1] = Location of the start of the "Data" portion of the program in the RAM
         registers[2] = Location of the end of the program in RAM
