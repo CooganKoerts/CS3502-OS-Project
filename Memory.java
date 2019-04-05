@@ -68,6 +68,8 @@ public class Memory {
     public static String[][] getRAM() {
         return RAM;
     }
+
+    public static int getRAMSize() { return RAM.length; }
 }
 
 /*

@@ -10,25 +10,8 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.LinkedList;
 
 public class Loader {
-    //public static LinkedList<ProcessControlBlock> queue = new LinkedList<ProcessControlBlock>();
-    //public static Disk disk = new Disk();
-
-    /*
-        Main method for testing
-     */
-
-    /*public static void main(String[] args) {
-        readProgramFile();
-        for (int i = 0; disk.getDiskMemory()[i][0] != null; i++) {
-            System.out.println("\n\nJob #" + ((int)i+1));
-            for (int j = 0; disk.getDiskMemory()[i][j] != null; j++) {
-                System.out.println(disk.getDiskMemory()[i][j]);
-            }
-        }
-    }*/
 
     public static void readProgramFile() {
 

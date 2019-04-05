@@ -9,6 +9,9 @@ public class Driver {
         queueSUSPENDED is a queue of processes that are suspended
         queueCOMPLETED is a queue of processes that have completed execution
 
+        Note: One job cannot be in multiple queues, if it is added to a new queue it must be removed from its old one if
+              it belonged to one.
+
      */
     public static LinkedList<ProcessControlBlock> queueNEW = new LinkedList<ProcessControlBlock>();
     public static LinkedList<ProcessControlBlock> queueREADY = new LinkedList<ProcessControlBlock>();
@@ -24,7 +27,8 @@ public class Driver {
     public static void main(String[] args) {
         Loader.readProgramFile();
         LongScheduler.sendToMemory();
-
+        ShortScheduler.sendToDispatcher();
+        /*
         for (int i = 0; i < queueNEW.size(); i++) {
             System.out.println("\nJobID: " + hexToDec(queueNEW.get(i).jobID) + "\tNumber of Words: " + hexToDec(queueNEW.get(i).numOfWords));
             for (int j = 0; j < Memory.getRAM()[queueNEW.get(i).registers[0]].length; j++) {
@@ -35,7 +39,7 @@ public class Driver {
                     System.out.println(Memory.getRAM()[queueNEW.get(i).registers[0]][j]);
                 }
             }
-        }
+        } */
     }
 
     /*
