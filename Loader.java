@@ -13,18 +13,22 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 public class Loader {
-    static LinkedList<ProcessControlBlock> queue = new LinkedList<ProcessControlBlock>();
-    static Disk disk = new Disk();
+    //public static LinkedList<ProcessControlBlock> queue = new LinkedList<ProcessControlBlock>();
+    //public static Disk disk = new Disk();
 
-    /*  public static void main(String[] args) {
-            readProgramFile();
-            for (int i = 0; disk.getDiskMemory()[i][0] != null; i++) {
-                System.out.println("\n\nJob #" + ((int)i+1));
-                for (int j = 0; disk.getDiskMemory()[i][j] != null; j++) {
-                    System.out.println(disk.getDiskMemory()[i][j]);
-                }
+    /*
+        Main method for testing
+     */
+
+    /*public static void main(String[] args) {
+        readProgramFile();
+        for (int i = 0; disk.getDiskMemory()[i][0] != null; i++) {
+            System.out.println("\n\nJob #" + ((int)i+1));
+            for (int j = 0; disk.getDiskMemory()[i][j] != null; j++) {
+                System.out.println(disk.getDiskMemory()[i][j]);
             }
-        } */
+        }
+    }*/
 
     public static void readProgramFile() {
 
@@ -56,7 +60,7 @@ public class Loader {
                         addJobToPCB(attributes);
                     }
                 } else {
-                    disk.addToDisk(jobID, k, line);
+                    Driver.disk.addToDisk(jobID, k, line);
                     k++;
                 }
             }
@@ -88,28 +92,13 @@ public class Loader {
         outputBuff = splitLine[8];
         tempBuff = splitLine[9];
 
-        queue.add(new ProcessControlBlock(jobID, numOfWords, priority_num, inputBuff, outputBuff, tempBuff));
+        Driver.queueNEW.add(new ProcessControlBlock(jobID, numOfWords, priority_num, inputBuff, outputBuff, tempBuff));
     }
 
     // Method for retrieving the JobID to help with
     // loading the programs onto the disk.
     public static int getJobID(String data) {
         String[] splitLine = data.split("\\s+");
-        return hexToDec(splitLine[2]);
-    }
-
-    // Simple method to convert HexiDecimal values to Decimal values
-    public static int hexToDec(String hexStr) {
-        String hexValues = "0123456789ABCDEF";
-        hexStr = hexStr.toUpperCase();
-        int hexValue = 0;
-
-        for (int i = 0; i < hexStr.length(); i++) {
-            char j = hexStr.charAt(i);
-            int k = hexValues.indexOf(j);
-            hexValue = 16 * hexValue + k;
-        }
-
-        return hexValue;
+        return Driver.hexToDec(splitLine[2]);
     }
 }

@@ -58,44 +58,14 @@ public class LongScheduler {
                                                    24, 16, 30, 12, 25, 27, 10, 22, 13, 18, 8
      */
 
-
-    /*
-        main method for testing
-     */
-    public static void main(String[] args) {
-        Loader.readProgramFile();
-        sendToMemory();
-        /*for (int i = 0; i < Loader.queue.size(); i++) {
-            System.out.println("Job ID: " + hexToDec(Loader.queue.get(i).jobID) + "\tPriority: " + hexToDec(Loader.queue.get(i).priority));
-        } */
-    }
-
-    /*
-
-     */
     public static void sendToMemory() {
         while (currentPriority <= 16) {
-            for (int i = 0; i < Loader.queue.size(); i++) {
-                if (hexToDec(Loader.queue.get(i).priority) == currentPriority) {
-                    Memory.writeToRAM(hexToDec(Loader.queue.get(i).jobID));
+            for (int i = 0; i < Driver.queueNEW.size(); i++) {
+                if (Driver.hexToDec(Driver.queueNEW.get(i).priority) == currentPriority) {
+                    Memory.writeToRAM(Driver.hexToDec(Driver.queueNEW.get(i).jobID));
                 }
             }
             currentPriority++;
         }
-    }
-
-    // Simple method to convert HexiDecimal values to Decimal values
-    public static int hexToDec(String hexStr) {
-        String hexValues = "0123456789ABCDEF";
-        hexStr = hexStr.toUpperCase();
-        int hexValue = 0;
-
-        for (int i = 0; i < hexStr.length(); i++) {
-            char j = hexStr.charAt(i);
-            int k = hexValues.indexOf(j);
-            hexValue = 16 * hexValue + k;
-        }
-
-        return hexValue;
     }
 }
