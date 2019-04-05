@@ -7,8 +7,7 @@ public class Driver {
         queueREADY is a queue of processes that are ready to execute
         queueWAITING is a queue of processes that are waiting
         queueSUSPENDED is a queue of processes that are suspended
-        queueCOMPLETED is a queue of processes that have completed execution
-
+        
         Note: One job cannot be in multiple queues, if it is added to a new queue it must be removed from its old one if
               it belonged to one.
 
@@ -17,7 +16,6 @@ public class Driver {
     public static LinkedList<ProcessControlBlock> queueREADY = new LinkedList<ProcessControlBlock>();
     public static LinkedList<ProcessControlBlock> queueWAITING = new LinkedList<ProcessControlBlock>();
     public static LinkedList<ProcessControlBlock> queueSUSPENDED = new LinkedList<ProcessControlBlock>();
-    public static LinkedList<ProcessControlBlock> queueCOMPLETED = new LinkedList<ProcessControlBlock>();
 
     /*
         Disk object to simulate the hard drive that programs will be loaded into
