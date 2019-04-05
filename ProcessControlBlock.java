@@ -14,7 +14,7 @@ public class ProcessControlBlock {
 
     /*
         registers[ ] is an array representing the registers in the PCB that holds six values:
-        registers[0] = Location of "block"/row index that the Job is located in the RAM
+        registers[0] = Location of "block"/row index that the Job is located in the RAM. This acts as the Base-Register
         registers[1] = Location of the start of the "Data" portion of the program in the RAM
         registers[2] = Location of the end of the program in RAM
         registers[3] = Location of the start of input buffer
