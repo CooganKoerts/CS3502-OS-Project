@@ -7,6 +7,8 @@ public class ProcessControlBlock {
     String outputBufferSize; // hex number
     String tempBufferSize; // hex number
 
+    int programCounter;
+
     /*
     Initializing method used to initially add data from ProgramFile.txt
      */

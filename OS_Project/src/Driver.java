@@ -4,6 +4,12 @@ public class Driver {
     {
         Driver d = new Driver();
         d.Loader();
+        //loop
+        //Scheduler
+        //dispatcher
+        //CPU
+        //WaitforInterrupt
+        //endloop
     }
 
     public void Loader()
