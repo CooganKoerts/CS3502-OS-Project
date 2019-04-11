@@ -15,25 +15,23 @@ public class Disk {
     // Each row is symbolic of a memory block
     // There is supposed to be (2048 words * 4 bytes per word) 8192 bytes in size
     // Each memory block (row) has an evenly split up amount of bytes (256).
-    private static String[][] memory = new String[32][256];
-
-    public Disk() { }
+    private static String[][] diskMemory = new String[32][256];
 
     public void addToDisk(int jobID, int index, String words) {
-        memory[jobID-1][index] = words;
+        diskMemory[jobID-1][index] = words;
     }
 
     public void removeFromDisk(int jobID) {
-        for (int i = 0; i < memory[jobID].length; i++){
-            memory[jobID][i] = null;
+        for (int i = 0; i < diskMemory[jobID].length; i++){
+            diskMemory[jobID][i] = null;
         }
     }
 
-    public int diskSize() { return memory.length; }
+    public int diskSize() { return diskMemory.length; }
 
-    public void setMemory(String[][] memory) {
-        this.memory = memory;
+    public void setDiskMemory(String[][] diskMemory) {
+        this.diskMemory = diskMemory;
     }
 
-    public String[][] getDiskMemory() { return memory; }
+    public String[][] getDiskMemory() { return diskMemory; }
 }
