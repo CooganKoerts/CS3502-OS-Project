@@ -35,68 +35,41 @@ public class CPU
         registers[1]=0;
     }
 
-    // CPU's program counter should point to the index in
-    public String fetch(int programCounter){
-        if (Memory.getRAMSize() > 0)
+
+    public void execute() {}
+
+    /*
+    fetch() returns a hex string of one (of the many) instructions for a job
+    @param RAMblock: the index in RAM where an array of instructions for a job is stored
+    @param programCounter: The CPU Program counter. assuming it is the instruction num
+                            to be called (for a job)
+
+    to find value of RAMblock for a job:
+    JobID = #;
+    for (int i = 0; i < Driver.queueREADY.size; i++)
+    {
+        if (jobID == Driver.queueREADY.get(i).jobID)
         {
-
+            RAMblock = Driver.queueREADY.get(i).registers[0];
         }
-
-
-        String instruction = cache[programCounter];
+    }
+     */
+    public String fetch(int RAMblock, int programCounter){
+        String instruction = "";
+        if (Memory.getRAMSize() > 0 && Memory.pullFromRam(RAMblock).length >= programCounter)
+        {
+            String[] RAMListOfInstruct = Memory.pullFromRam(RAMblock);
+            instruction = RAMListOfInstruct[programCounter];
+        }
         return instruction;
     }
 
-    public static String hex_to_binary(String s)
-    {
-        String digits = "0123456789ABCDEF";
-        s = s.toUpperCase();
-        int val = 0;
-        for (int i = 0; i < s.length(); i++)
-        {
-            char c = s.charAt(i);
-            int d = digits.indexOf(c);
-            val = 16*val + d;
-        }
-
-        String val2 = Integer.toBinaryString(val);
-        return val2;
-    }
-
-    public static int hex_to_decimal(String s)
-    {
-        String digits = "0123456789ABCDEF";
-        s = s.toUpperCase();
-        int val = 0;
-        for (int i = 0; i < s.length(); i++)
-        {
-            char c = s.charAt(i);
-            int d = digits.indexOf(c);
-            val = 16*val + d;
-        }
-        return val;
-    }
-
-    public int binary_to_Integer(String binary) {
-        char[] numbers = binary.toCharArray();
-        int result = 0;
-        for(int i=numbers.length - 1; i>=0; i--)
-            if(numbers[i]=='1')
-                result += Math.pow(2, (numbers.length-i - 1));
-        return result;
-    }
-
     /*
-        Returns array of strings InstructionSet
-        Each string is a binary number except for any OPCODE values,
-        which should be converted to hex already in this method
-
-        When parsing through this, start by checking InstructionSet[0]
-        either equals 00, 01, 10, or 11. take indexes based on how many values
-        come with that instruction (opcode, reg, dreg, address, etc) and when
-        those are taken, go to the next index and check if 00, 01, 10, 11,
-        and repeat this.
-         */
+    @param: instruction is the original hex instruction passed in to the loader
+    Returns int representative of instruction type: either 00, 01, 10, or 11
+    May need to add binary to hex conversion so OPcode can be matched
+    with those found in InstructionSet under project specs on d2l
+    */
     public Integer Decode(String instruction) {
         //ArrayList<Integer> InstructionSet = new ArrayList<Integer>();
 
@@ -163,8 +136,45 @@ public class CPU
         return instant;
     }
 
-    
-    public void execute() {}
+    public static String hex_to_binary(String s)
+    {
+        String digits = "0123456789ABCDEF";
+        s = s.toUpperCase();
+        int val = 0;
+        for (int i = 0; i < s.length(); i++)
+        {
+            char c = s.charAt(i);
+            int d = digits.indexOf(c);
+            val = 16*val + d;
+        }
+
+        String val2 = Integer.toBinaryString(val);
+        return val2;
+    }
+
+    public static int hex_to_decimal(String s)
+    {
+        String digits = "0123456789ABCDEF";
+        s = s.toUpperCase();
+        int val = 0;
+        for (int i = 0; i < s.length(); i++)
+        {
+            char c = s.charAt(i);
+            int d = digits.indexOf(c);
+            val = 16*val + d;
+        }
+        return val;
+    }
+
+    public int binary_to_Integer(String binary) {
+        char[] numbers = binary.toCharArray();
+        int result = 0;
+        for(int i=numbers.length - 1; i>=0; i--)
+            if(numbers[i]=='1')
+                result += Math.pow(2, (numbers.length-i - 1));
+        return result;
+    }
+
     
     /*
     Param AddressingMode a: Direct or Indirect
