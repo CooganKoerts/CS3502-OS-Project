@@ -2,8 +2,6 @@
     This is our CPU file
  */
 
-import java.util.ArrayList;
-
 public class CPU
 {
     public int[] registers = new int[16];
@@ -37,7 +35,14 @@ public class CPU
         registers[1]=0;
     }
 
+    // CPU's program counter should point to the index in
     public String fetch(int programCounter){
+        if (Memory.getRAMSize() > 0)
+        {
+
+        }
+
+
         String instruction = cache[programCounter];
         return instruction;
     }
@@ -92,8 +97,8 @@ public class CPU
         those are taken, go to the next index and check if 00, 01, 10, 11,
         and repeat this.
          */
-    public ArrayList<Integer> Decode(String instruction) {
-        ArrayList<Integer> InstructionSet = new ArrayList<Integer>();
+    public Integer Decode(String instruction) {
+        //ArrayList<Integer> InstructionSet = new ArrayList<Integer>();
 
         // get binary conversion of last 30 bits of instruction
         String binary_instructions = hex_to_binary(instruction.substring(2));
@@ -108,11 +113,11 @@ public class CPU
                 temporary_sreg1 = binary_to_Integer(temporary_instructions.substring(6, 10));
                 temporary_sreg2 = binary_to_Integer(temporary_instructions.substring(10, 14));
                 temporary_Dst_reg = binary_to_Integer(temporary_instructions.substring(14, 18));
-                InstructionSet.add(00);
+                /*InstructionSet.add(00);
                 InstructionSet.add(operationCode);
                 InstructionSet.add(temporary_sreg1);
                 InstructionSet.add(temporary_sreg2);
-                InstructionSet.add(temporary_Dst_reg);
+                InstructionSet.add(temporary_Dst_reg);*/
                 break;
             }
 
@@ -121,20 +126,20 @@ public class CPU
                 temporary_breg = binary_to_Integer(temporary_instructions.substring(6, 10));
                 temporary_Dst_reg = binary_to_Integer(temporary_instructions.substring(10, 14));
                 temporary_address = binary_to_Integer(temporary_instructions.substring(14));
-                InstructionSet.add(01);
+                /*InstructionSet.add(01);
                 InstructionSet.add(operationCode);
                 InstructionSet.add(temporary_breg);
                 InstructionSet.add(temporary_Dst_reg);
-                InstructionSet.add(temporary_address);
+                InstructionSet.add(temporary_address);*/
                 break;
             }
 
             case 10: { // Unconditional jump
                 operationCode = binary_to_Integer(temporary_instructions.substring(0, 6)); // needs to be converted back to hex
                 temporary_address = binary_to_Integer(temporary_instructions.substring(6));
-                InstructionSet.add(10);
+                /*InstructionSet.add(10);
                 InstructionSet.add(operationCode);
-                InstructionSet.add(temporary_address);
+                InstructionSet.add(temporary_address);*/
                 break;
             }
 
@@ -143,11 +148,11 @@ public class CPU
                 temporary_reg_1 = binary_to_Integer(temporary_instructions.substring(6, 10));
                 temporary_reg_2 = binary_to_Integer(temporary_instructions.substring(10, 14));
                 temporary_address = binary_to_Integer(temporary_instructions.substring(14));
-                InstructionSet.add(11);
+                /*InstructionSet.add(11);
                 InstructionSet.add(operationCode);
                 InstructionSet.add(temporary_reg_1);
                 InstructionSet.add(temporary_reg_2);
-                InstructionSet.add(temporary_address);
+                InstructionSet.add(temporary_address);*/
                 break;
             }
 
@@ -155,7 +160,7 @@ public class CPU
                 System.out.println("EXCEPTION: Invalid instruction type");
             }
         }
-        return InstructionSet;
+        return instant;
     }
 
     
