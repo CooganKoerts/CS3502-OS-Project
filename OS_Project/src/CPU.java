@@ -104,7 +104,7 @@ public class CPU
 
         switch (instant) {
             case 00: { // Arithmetic
-                //operationCode = temporary_instructions.substring(0, 6); // needs to be converted back to hex
+                operationCode = binary_to_Integer(temporary_instructions.substring(0, 6)); // needs to be converted back to hex
                 temporary_sreg1 = binary_to_Integer(temporary_instructions.substring(6, 10));
                 temporary_sreg2 = binary_to_Integer(temporary_instructions.substring(10, 14));
                 temporary_Dst_reg = binary_to_Integer(temporary_instructions.substring(14, 18));
@@ -117,7 +117,7 @@ public class CPU
             }
 
             case 01: { // Conditional branch and Immediate format
-                //operationCode = temporary_instructions.substring(0, 6); // needs to be converted back to hex
+                operationCode = binary_to_Integer(temporary_instructions.substring(0, 6)); // needs to be converted back to hex
                 temporary_breg = binary_to_Integer(temporary_instructions.substring(6, 10));
                 temporary_Dst_reg = binary_to_Integer(temporary_instructions.substring(10, 14));
                 temporary_address = binary_to_Integer(temporary_instructions.substring(14));
@@ -130,7 +130,7 @@ public class CPU
             }
 
             case 10: { // Unconditional jump
-                //operationCode = temporary_instructions.substring(0, 6); // needs to be converted back to hex
+                operationCode = binary_to_Integer(temporary_instructions.substring(0, 6)); // needs to be converted back to hex
                 temporary_address = binary_to_Integer(temporary_instructions.substring(6));
                 InstructionSet.add(10);
                 InstructionSet.add(operationCode);
@@ -139,7 +139,7 @@ public class CPU
             }
 
             case 11: { //IO operation
-                //operationCode = temporary_instructions.substring(0, 6); // needs to be converted back to hex
+                operationCode = binary_to_Integer(temporary_instructions.substring(0, 6)); // needs to be converted back to hex
                 temporary_reg_1 = binary_to_Integer(temporary_instructions.substring(6, 10));
                 temporary_reg_2 = binary_to_Integer(temporary_instructions.substring(10, 14));
                 temporary_address = binary_to_Integer(temporary_instructions.substring(14));
