@@ -1,4 +1,4 @@
-/*
+package OS_Project.src;/*
     The goal of this class is to decide which programs are ready to head to the dispatcher.
  */
 

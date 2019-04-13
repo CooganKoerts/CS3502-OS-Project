@@ -1,4 +1,4 @@
-/*
+package OS_Project.src;/*
 
     This class builds the registers that will be used by the operating system
     and accesses RAM.

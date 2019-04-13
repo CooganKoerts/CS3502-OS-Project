@@ -1,3 +1,5 @@
+package OS_Project.src;
+
 /*
     This class decides which program will be placed into the ready queue next which will then be pulled and accessed by
     the CPU.

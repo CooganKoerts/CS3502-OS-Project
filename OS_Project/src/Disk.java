@@ -1,4 +1,4 @@
-/*
+package OS_Project.src;/*
     Disk class will be a disk object of a 2d array Data structures that will
     act as a virtual hard drive and store a job's "words" as strings in each "block" .
 

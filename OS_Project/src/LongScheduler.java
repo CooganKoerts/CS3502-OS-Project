@@ -1,4 +1,4 @@
-/*
+package OS_Project.src;/*
 
     The purpose for this class is to take programs from the Disk and
     load them into the memory (RAM) based off their priority #
