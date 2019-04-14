@@ -494,16 +494,16 @@ public class CPU
     
     /*
     Param AddressingMode a: Direct or Indirect
-    Param int base: when a job is scheduled and loaded into RAM, base will be the index in RAM (?)
+    Param int base: a job's location in the READY queue
      */
-    public void effective_Addr(AddressingMode a, int base) {
-        if (a.equals(AddressingMode.Direct))
-        {
-
-        }
-        else if (a.equals(AddressingMode.Indirect))
-        {
-
+    public int effective_Addr(AddressingMode a, int base) {
+        // if "direct" then it is referring to a job location in the RAM
+        // if "indirect" then it is referring to a job's location on the disk (?)
+        if (a.equals(AddressingMode.Direct)) {
+            return Driver.queueREADY.get(base).registers[0];
+        } else {
+            // jobID-1 is also coincidentally the jobs position on the disk since everything is loaded in order origianlly.
+            return Driver.hexToDec(Driver.queueREADY.get(base).jobID) - 1 ;
         }
     }
 }
