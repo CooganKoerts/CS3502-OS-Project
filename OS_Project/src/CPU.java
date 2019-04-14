@@ -2,12 +2,41 @@
     This is our CPU file
  */
 
+import com.sun.tools.corba.se.idl.TypedefGen;
+
 public class CPU
 {
+    // CPU PCB
+    private int cpuNumber;
+    public int programCounter; // holds address of instruction to fetch
+    // struct state; // record of environment that is saved on interrupt
+    // int codeSize; // extracted from the JOB control line
+
+    /*
+    Reg-0 (0000) being the Accumulator.
+    Reg-1(0001) being the Zero register, which contains the value 0.
+    All other registers are general purpose register.
+     */
     public int[] registers = new int[16];
 
-    public String[] cache;
 
+    // struct sched; // burst time, priority, queue type, time slice, remain type
+    // struct accounts; // cpu time, time limit, time delays, start/end times, io times
+    // struct memories; // page table base, pages, page size, b regs
+    // struct progeny; // child procid, child code pointers
+    // parent: ptr; // pointer to parent
+    // struct resources; // file pointers, io devices - unit class, unit #, open file tables
+    // string status; // running, ready, blocked, new
+    // status_info; // pointer to ready list of active processes or blocked processes
+    // Int priority; // of the process, extracted from JOB control line
+    public String[] cache;
+    public int tempBuffer;
+    public int inputBuffer;
+    public int outputBuffer;
+
+    // Decode Method Variables
+    public int instant;
+    public String operationCode; // hex string
     public int temporary_reg_1;
     public int temporary_reg_2;
     public int temporary_Dst_reg;
@@ -16,10 +45,6 @@ public class CPU
     public int temporary_sreg2;
     public int temporary_address;
 
-    private int cpuNumber;
-    public int instant;
-    public int operationCode;
-    public int programCounter;
     /*
      Addressing mode is a parameter for effective address computation
      */
@@ -71,61 +96,42 @@ public class CPU
     with those found in InstructionSet under project specs on d2l
     */
     public Integer Decode(String instruction) {
-        //ArrayList<Integer> InstructionSet = new ArrayList<Integer>();
 
         // get binary conversion of last 30 bits of instruction
-        String binary_instructions = hex_to_binary(instruction.substring(2));
-        String temporary_instructions = binary_instructions;
+        String binary_instructions = hex_to_binary(instruction);
+        String temporary_instructions = binary_instructions.substring(2);
 
         // first 2 bits
-        instant = Integer.parseInt(instruction.substring(0, 2));
+        instant = Integer.parseInt(binary_instructions.substring(0, 2));
 
         switch (instant) {
             case 00: { // Arithmetic
-                operationCode = binary_to_Integer(temporary_instructions.substring(0, 6)); // needs to be converted back to hex
-                temporary_sreg1 = binary_to_Integer(temporary_instructions.substring(6, 10));
-                temporary_sreg2 = binary_to_Integer(temporary_instructions.substring(10, 14));
-                temporary_Dst_reg = binary_to_Integer(temporary_instructions.substring(14, 18));
-                /*InstructionSet.add(00);
-                InstructionSet.add(operationCode);
-                InstructionSet.add(temporary_sreg1);
-                InstructionSet.add(temporary_sreg2);
-                InstructionSet.add(temporary_Dst_reg);*/
+                operationCode = binary_to_hexadecimal(temporary_instructions.substring(0, 6));
+                temporary_sreg1 = binary_to_decimal(temporary_instructions.substring(6, 10));
+                temporary_sreg2 = binary_to_decimal(temporary_instructions.substring(10, 14));
+                temporary_Dst_reg = binary_to_decimal(temporary_instructions.substring(14, 18));
                 break;
             }
 
             case 01: { // Conditional branch and Immediate format
-                operationCode = binary_to_Integer(temporary_instructions.substring(0, 6)); // needs to be converted back to hex
-                temporary_breg = binary_to_Integer(temporary_instructions.substring(6, 10));
-                temporary_Dst_reg = binary_to_Integer(temporary_instructions.substring(10, 14));
-                temporary_address = binary_to_Integer(temporary_instructions.substring(14));
-                /*InstructionSet.add(01);
-                InstructionSet.add(operationCode);
-                InstructionSet.add(temporary_breg);
-                InstructionSet.add(temporary_Dst_reg);
-                InstructionSet.add(temporary_address);*/
+                operationCode = binary_to_hexadecimal(temporary_instructions.substring(0, 6));
+                temporary_breg = binary_to_decimal(temporary_instructions.substring(6, 10));
+                temporary_Dst_reg = binary_to_decimal(temporary_instructions.substring(10, 14));
+                temporary_address = binary_to_decimal(temporary_instructions.substring(14));
                 break;
             }
 
             case 10: { // Unconditional jump
-                operationCode = binary_to_Integer(temporary_instructions.substring(0, 6)); // needs to be converted back to hex
-                temporary_address = binary_to_Integer(temporary_instructions.substring(6));
-                /*InstructionSet.add(10);
-                InstructionSet.add(operationCode);
-                InstructionSet.add(temporary_address);*/
+                operationCode = binary_to_hexadecimal(temporary_instructions.substring(0, 6));
+                temporary_address = binary_to_decimal(temporary_instructions.substring(6));
                 break;
             }
 
             case 11: { //IO operation
-                operationCode = binary_to_Integer(temporary_instructions.substring(0, 6)); // needs to be converted back to hex
-                temporary_reg_1 = binary_to_Integer(temporary_instructions.substring(6, 10));
-                temporary_reg_2 = binary_to_Integer(temporary_instructions.substring(10, 14));
-                temporary_address = binary_to_Integer(temporary_instructions.substring(14));
-                /*InstructionSet.add(11);
-                InstructionSet.add(operationCode);
-                InstructionSet.add(temporary_reg_1);
-                InstructionSet.add(temporary_reg_2);
-                InstructionSet.add(temporary_address);*/
+                operationCode = binary_to_hexadecimal(temporary_instructions.substring(0, 6));
+                temporary_reg_1 = binary_to_decimal(temporary_instructions.substring(6, 10));
+                temporary_reg_2 = binary_to_decimal(temporary_instructions.substring(10, 14));
+                temporary_address = binary_to_decimal(temporary_instructions.substring(14));
                 break;
             }
 
@@ -135,6 +141,18 @@ public class CPU
         }
         return instant;
     }
+
+    // The instruction may read the content of Address/Reg 2 into Reg 1.
+    // given reg1, reg2, address
+    // Reads content of I/P buffer into a accumulator
+    /*public void read(int jobID) {
+        if (temporary_reg_2 > 0) {
+            registers[temporary_reg_1] =
+        }
+        else {
+
+        }
+    }*/
 
     public static String hex_to_binary(String s)
     {
@@ -173,6 +191,55 @@ public class CPU
             if(numbers[i]=='1')
                 result += Math.pow(2, (numbers.length-i - 1));
         return result;
+    }
+
+    public boolean isBinary(String num) {
+        boolean isBinary = false;
+        if (num != null && !num.isEmpty())
+        {
+            long number = Long.parseLong(num);
+            while (number > 0) {
+                if (number % 10 <= 1) {
+                    isBinary = true;
+                }
+                else {
+                    isBinary = false;
+                    break;
+                }
+                number /= 10;
+            }
+        }
+        return isBinary;
+    }
+
+    public int binary_to_decimal(String binary) {
+        int length = binary.length() - 1;
+        int decimal = 0;
+        if (isBinary(binary)) {
+            char[] digits = binary.toCharArray();
+            for (char digit : digits) {
+                if (String.valueOf(digit).equals("1")) {
+                    decimal += Math.pow(2, length);
+                }
+                length--;
+            }
+        }
+        return decimal;
+    }
+
+    public String binary_to_hexadecimal(String binary) {
+        String hexa = "";
+        char[] hex = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a',
+                'b', 'c', 'd', 'e', 'f'};
+        if (binary != null && !binary.isEmpty())
+        {
+            int decimal = binary_to_decimal(binary);
+            while (decimal > 0) {
+                hexa = hex[decimal % 16] + hexa;
+                decimal /= 16;
+            }
+        }
+        return hexa;
     }
 
     
