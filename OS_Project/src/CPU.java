@@ -493,6 +493,15 @@ public class CPU
 
     
     /*
+        Param index: takes Index of Job to be loaded in READY queue
+
+        "loads" all of the instructions into the cache
+     */
+    public void setCache(int index) {
+        cache = Memory.pullFromRam(Driver.queueREADY.get(index).registers[0]);
+    }
+    
+    /*
     Param AddressingMode a: Direct or Indirect
     Param int base: a job's location in the READY queue
      */
