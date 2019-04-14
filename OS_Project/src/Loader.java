@@ -18,7 +18,7 @@ public class Loader {
         String attributes = "";
         BufferedReader reader;
         try {
-            reader = new BufferedReader(new FileReader("ProgramFile.txt"));
+            reader = new BufferedReader(new FileReader("OS_Project/ProgramFile.txt"));
             String line;
             int jobID = 0, k = 0;
             while ((line = reader.readLine()) != null) {
