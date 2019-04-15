@@ -93,7 +93,7 @@ public class CPU
     public Integer Decode(String instruction) {
 
         // get binary conversion of last 30 bits of instruction
-        String binary_instructions = hex_to_binary(instruction);
+        String binary_instructions = Helpers.hex_to_binary(instruction);
         String temporary_instructions = binary_instructions.substring(2);
 
         // first 2 bits
@@ -101,32 +101,32 @@ public class CPU
 
         switch (instant) {
             case 00: { // Arithmetic
-                operationCode = binary_to_hexadecimal(temporary_instructions.substring(0, 6));
-                temporary_sreg1 = binary_to_decimal(temporary_instructions.substring(6, 10));
-                temporary_sreg2 = binary_to_decimal(temporary_instructions.substring(10, 14));
-                temporary_Dst_reg = binary_to_decimal(temporary_instructions.substring(14, 18));
+                operationCode = Helpers.binary_to_hexadecimal(temporary_instructions.substring(0, 6));
+                temporary_sreg1 = Helpers.binary_to_decimal(temporary_instructions.substring(6, 10));
+                temporary_sreg2 = Helpers.binary_to_decimal(temporary_instructions.substring(10, 14));
+                temporary_Dst_reg = Helpers.binary_to_decimal(temporary_instructions.substring(14, 18));
                 break;
             }
 
             case 01: { // Conditional branch and Immediate format
-                operationCode = binary_to_hexadecimal(temporary_instructions.substring(0, 6));
-                temporary_breg = binary_to_decimal(temporary_instructions.substring(6, 10));
-                temporary_Dst_reg = binary_to_decimal(temporary_instructions.substring(10, 14));
-                temporary_address = binary_to_decimal(temporary_instructions.substring(14));
+                operationCode = Helpers.binary_to_hexadecimal(temporary_instructions.substring(0, 6));
+                temporary_breg = Helpers.binary_to_decimal(temporary_instructions.substring(6, 10));
+                temporary_Dst_reg = Helpers.binary_to_decimal(temporary_instructions.substring(10, 14));
+                temporary_address = Helpers.binary_to_decimal(temporary_instructions.substring(14));
                 break;
             }
 
             case 10: { // Unconditional jump
-                operationCode = binary_to_hexadecimal(temporary_instructions.substring(0, 6));
-                temporary_address = binary_to_decimal(temporary_instructions.substring(6));
+                operationCode = Helpers.binary_to_hexadecimal(temporary_instructions.substring(0, 6));
+                temporary_address = Helpers.binary_to_decimal(temporary_instructions.substring(6));
                 break;
             }
 
             case 11: { //IO operation
-                operationCode = binary_to_hexadecimal(temporary_instructions.substring(0, 6));
-                temporary_reg_1 = binary_to_decimal(temporary_instructions.substring(6, 10));
-                temporary_reg_2 = binary_to_decimal(temporary_instructions.substring(10, 14));
-                temporary_address = binary_to_decimal(temporary_instructions.substring(14));
+                operationCode = Helpers.binary_to_hexadecimal(temporary_instructions.substring(0, 6));
+                temporary_reg_1 = Helpers.binary_to_decimal(temporary_instructions.substring(6, 10));
+                temporary_reg_2 = Helpers.binary_to_decimal(temporary_instructions.substring(10, 14));
+                temporary_address = Helpers.binary_to_decimal(temporary_instructions.substring(14));
                 break;
             }
 
@@ -153,11 +153,11 @@ public class CPU
             {
                 if(temporary_reg_2 > 0)
                 {
-                    registers[temporary_reg_1] = hex_to_decimal(cache[registers[temporary_reg_2]/4].substring(2));
+                    registers[temporary_reg_1] = Helpers.hex_to_decimal(cache[registers[temporary_reg_2]/4].substring(2));
                 }
                 else
                 {
-                    registers[temporary_reg_1] = hex_to_decimal(cache[temporary_address/4].substring(2));
+                    registers[temporary_reg_1] = Helpers.hex_to_decimal(cache[temporary_address/4].substring(2));
                 }
                 break;
             }
@@ -170,7 +170,7 @@ public class CPU
                 }
                 else
                 {
-                    cache[temporary_address/4] = "0x" + decimal_to_hex(registers[temporary_reg_1]);
+                    cache[temporary_address/4] = "0x" + Helpers.decimal_to_hex(registers[temporary_reg_1]);
                     //dma write with temporary_address
                 }
 
@@ -180,12 +180,12 @@ public class CPU
             }
             case 2: //2 ST
             {
-                cache[registers[temporary_Dst_reg]/4] = "0x" + decimal_to_hex( registers[temporary_breg]);
+                cache[registers[temporary_Dst_reg]/4] = "0x" + Helpers.decimal_to_hex( registers[temporary_breg]);
                 break;
             }
             case 3: //LW
             {
-                registers[temporary_Dst_reg]= hex_to_decimal(cache[(registers[temporary_breg]/4) + temporary_address].substring(2));
+                registers[temporary_Dst_reg]= Helpers.hex_to_decimal(cache[(registers[temporary_breg]/4) + temporary_address].substring(2));
 
                 break;
             }
@@ -381,114 +381,6 @@ public class CPU
 
         }
     }*/
-
-
-    public static String hex_to_binary(String s)
-    {
-        String digits = "0123456789ABCDEF";
-        s = s.toUpperCase();
-        int val = 0;
-        for (int i = 0; i < s.length(); i++)
-        {
-            char c = s.charAt(i);
-            int d = digits.indexOf(c);
-            val = 16*val + d;
-        }
-
-        String val2 = Integer.toBinaryString(val);
-        return val2;
-    }
-
-    public static int hex_to_decimal(String s)
-    {
-        String digits = "0123456789ABCDEF";
-        s = s.toUpperCase();
-        int val = 0;
-        for (int i = 0; i < s.length(); i++)
-        {
-            char c = s.charAt(i);
-            int d = digits.indexOf(c);
-            val = 16*val + d;
-        }
-        return val;
-    }
-
-    public int binary_to_Integer(String binary) {
-        char[] numbers = binary.toCharArray();
-        int result = 0;
-        for(int i=numbers.length - 1; i>=0; i--)
-            if(numbers[i]=='1')
-                result += Math.pow(2, (numbers.length-i - 1));
-        return result;
-    }
-
-
-    public boolean isBinary(String num) {
-        boolean isBinary = false;
-        if (num != null && !num.isEmpty())
-        {
-            long number = Long.parseLong(num);
-            while (number > 0) {
-                if (number % 10 <= 1) {
-                    isBinary = true;
-                }
-                else {
-                    isBinary = false;
-                    break;
-                }
-                number /= 10;
-            }
-        }
-        return isBinary;
-    }
-
-    public int binary_to_decimal(String binary) {
-        int length = binary.length() - 1;
-        int decimal = 0;
-        if (isBinary(binary)) {
-            char[] digits = binary.toCharArray();
-            for (char digit : digits) {
-                if (String.valueOf(digit).equals("1")) {
-                    decimal += Math.pow(2, length);
-                }
-                length--;
-            }
-        }
-        return decimal;
-    }
-
-    public String binary_to_hexadecimal(String binary) {
-        String hexa = "";
-        char[] hex = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a',
-                'b', 'c', 'd', 'e', 'f'};
-        if (binary != null && !binary.isEmpty()) {
-            int decimal = binary_to_decimal(binary);
-            while (decimal > 0) {
-                hexa = hex[decimal % 16] + hexa;
-                decimal /= 16;
-            }
-        }
-        return hexa;
-    }
-
-    public String decimal_to_hex(int decimal){
-        int sizeOfIntInHalfBytes = 8;
-        int numberOfBitsInAHalfByte = 4;
-        int halfByte = 0x0F;
-        char[] hexDigits = {
-                '0', '1', '2', '3', '4', '5', '6', '7',
-                '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
-        };
-        StringBuilder hexBuilder = new StringBuilder(sizeOfIntInHalfBytes);
-        hexBuilder.setLength(sizeOfIntInHalfBytes);
-        for (int i = sizeOfIntInHalfBytes - 1; i >= 0; --i)
-        {
-            int j = decimal & halfByte;
-            hexBuilder.setCharAt(i, hexDigits[j]);
-            decimal >>= numberOfBitsInAHalfByte;
-        }
-        return hexBuilder.toString();
-    }
 
     
     /*
