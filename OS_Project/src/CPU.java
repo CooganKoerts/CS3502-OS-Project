@@ -2,11 +2,16 @@
     This is our CPU file
  */
 
-public class CPU
-{
+public class CPU implements Runnable {
+
+    private long threadID;
+
     // CPU PCB
     private int cpuNumber;
     public int programCounter; // holds address of instruction to fetch
+    public int instructCounter; // holds number of instructions
+    Integer priority; // of the process, extracted from JOB control line
+
     // struct state; // record of environment that is saved on interrupt
     // int codeSize; // extracted from the JOB control line
 
@@ -26,7 +31,7 @@ public class CPU
     // struct resources; // file pointers, io devices - unit class, unit #, open file tables
     // string status; // running, ready, blocked, new
     // status_info; // pointer to ready list of active processes or blocked processes
-    // Int priority; // of the process, extracted from JOB control line
+
     public String[] cache;
     public int tempBuffer;
     public int inputBuffer;
@@ -51,36 +56,33 @@ public class CPU
         Direct, Indirect;
     }
 
-
     public CPU(int cpuNumber)
     {
         this.cpuNumber = cpuNumber;
         registers[1]=0;
     }
 
-    /*
-    fetch() returns a hex string of one (of the many) instructions for a job
-    @param RAMblock: the index in RAM where an array of instructions for a job is stored
-    @param programCounter: The CPU Program counter. assuming it is the instruction num
-                            to be called (for a job)
-
-    to find value of RAMblock for a job:
-    JobID = #;
-    for (int i = 0; i < Driver.queueREADY.size; i++)
+    public void run()
     {
-        if (jobID == Driver.queueREADY.get(i).jobID)
+        // increments through
+        threadID = Thread.currentThread().getId();
+        // loops through instructions for job stored in cache
+        while (programCounter < instructCounter)
         {
-            RAMblock = Driver.queueREADY.get(i).registers[0];
+            String instruction = fetch(programCounter);
+            int opCode = Decode(instruction);
+            Execute(opCode);
+            programCounter++;
         }
     }
+
+    /*
+    fetch() returns a hex string of one (of the many) instructions for a job
+    @param programCounter: The CPU Program counter. assuming it is the instruction num
+                            to be called (for a job)
      */
-    public String fetch(int RAMblock, int programCounter){
-        String instruction = "";
-        if (Memory.getRAMSize() > 0 && Memory.pullFromRam(RAMblock).length >= programCounter)
-        {
-            String[] RAMListOfInstruct = Memory.pullFromRam(RAMblock);
-            instruction = RAMListOfInstruct[programCounter];
-        }
+    public String fetch(int programCounter){
+        String instruction = cache[programCounter];
         return instruction;
     }
 
@@ -366,30 +368,18 @@ public class CPU
                 System.out.println("System error: invalid operation");
             }
         }
-        programCounter++;
-
     }
 
-    // The instruction may read the content of Address/Reg 2 into Reg 1.
-    // given reg1, reg2, address
-    // Reads content of I/P buffer into a accumulator
-    /*public void read(int jobID) {
-        if (temporary_reg_2 > 0) {
-            registers[temporary_reg_1] =
-        }
-        else {
-
-        }
-    }*/
-
-    
     /*
         Param index: takes Index of Job to be loaded in READY queue
 
         "loads" all of the instructions into the cache
      */
-    public void setCache(int index) {
-        cache = Memory.pullFromRam(Driver.queueREADY.get(index).registers[0]);
+    public void setCache(ProcessControlBlock job) {
+        cache = Memory.pullFromRam(job.registers[0]); // this does same as previous line (below) ?
+        //cache = Memory.pullFromRam(Driver.queueREADY.get(index).registers[0]);
+        instructCounter = job.registers[2]; // gets num of instruction words for job
+        programCounter = 0;
     }
     
     /*
@@ -406,4 +396,5 @@ public class CPU
             return Driver.hexToDec(Driver.queueREADY.get(base).jobID) - 1 ;
         }
     }
+
 }

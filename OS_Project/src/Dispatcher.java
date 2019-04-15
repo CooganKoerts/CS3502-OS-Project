@@ -17,6 +17,12 @@ public class Dispatcher {
         }
     }
 
+    public static void dispatchProcesstoCPU(ProcessControlBlock job)
+    {
+        Driver.cpu.setCache(job);
+        Driver.cpu.run();
+    }
+
     /*
         Sends processes that are marked "SUSPENDED" to the suspended queue
      */

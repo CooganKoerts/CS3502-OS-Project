@@ -19,6 +19,7 @@ public class Driver {
     public static LinkedList<ProcessControlBlock> queueREADY = new LinkedList<ProcessControlBlock>();
     public static LinkedList<ProcessControlBlock> queueWAITING = new LinkedList<ProcessControlBlock>();
     public static LinkedList<ProcessControlBlock> queueSUSPENDED = new LinkedList<ProcessControlBlock>();
+    public static CPU cpu = new CPU(1); // will be CPU[] cpus when multiprocessor is implemented
 
     /*
         Disk object to simulate the hard drive that programs will be loaded into
@@ -29,6 +30,8 @@ public class Driver {
         Loader.readProgramFile();
         LongScheduler.sendToMemory();
         ShortScheduler.sendToDispatcher();
+        Dispatcher.loadJob(); // loops through ready
+        cpu.run();
         /*
         for (int i = 0; i < queueNEW.size(); i++) {
             System.out.println("\nJobID: " + hexToDec(queueNEW.get(i).jobID) + "\tNumber of Words: " + hexToDec(queueNEW.get(i).numOfWords));

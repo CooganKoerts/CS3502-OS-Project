@@ -35,4 +35,15 @@ public class ShortScheduler {
         }
     }
 
+    public static void scheduleJob()
+    {
+        if (Driver.queueREADY.size() > 0)
+        {
+            for (int i = 0; i < Driver.queueREADY.size(); i++)
+            {
+                Dispatcher.dispatchProcesstoCPU(Driver.queueREADY.get(i)); // sends one process to be dispatched
+            }
+        }
+    }
+
 }
