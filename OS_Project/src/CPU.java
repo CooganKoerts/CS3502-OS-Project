@@ -139,18 +139,6 @@ public class CPU
         return instant;
     }
 
-    // The instruction may read the content of Address/Reg 2 into Reg 1.
-    // given reg1, reg2, address
-    // Reads content of I/P buffer into a accumulator
-    /*public void read(int jobID) {
-        if (temporary_reg_2 > 0) {
-            registers[temporary_reg_1] =
-        }
-        else {
-
-        }
-    }*/
-
 
     /*
     * @param: Integer instruction from decode method
@@ -383,6 +371,19 @@ public class CPU
         programCounter++;
 
     }
+
+    // The instruction may read the content of Address/Reg 2 into Reg 1.
+    // given reg1, reg2, address
+    // Reads content of I/P buffer into a accumulator
+    /*public void read(int jobID) {
+        if (temporary_reg_2 > 0) {
+            registers[temporary_reg_1] =
+        }
+        else {
+
+        }
+    }*/
+
 
     public static String hex_to_binary(String s)
     {
