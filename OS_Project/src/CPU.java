@@ -2,8 +2,6 @@
     This is our CPU file
  */
 
-import com.sun.tools.corba.se.idl.TypedefGen;
-
 public class CPU
 {
     // CPU PCB
@@ -494,17 +492,26 @@ public class CPU
 
     
     /*
-    Param AddressingMode a: Direct or Indirect
-    Param int base: when a job is scheduled and loaded into RAM, base will be the index in RAM (?)
+        Param index: takes Index of Job to be loaded in READY queue
+
+        "loads" all of the instructions into the cache
      */
-    public void effective_Addr(AddressingMode a, int base) {
-        if (a.equals(AddressingMode.Direct))
-        {
-
-        }
-        else if (a.equals(AddressingMode.Indirect))
-        {
-
+    public void setCache(int index) {
+        cache = Memory.pullFromRam(Driver.queueREADY.get(index).registers[0]);
+    }
+    
+    /*
+    Param AddressingMode a: Direct or Indirect
+    Param int base: a job's location in the READY queue
+     */
+    public int effective_Addr(AddressingMode a, int base) {
+        // if "direct" then it is referring to a job location in the RAM
+        // if "indirect" then it is referring to a job's location on the disk (?)
+        if (a.equals(AddressingMode.Direct)) {
+            return Driver.queueREADY.get(base).registers[0];
+        } else {
+            // jobID-1 is also coincidentally the jobs position on the disk since everything is loaded in order origianlly.
+            return Driver.hexToDec(Driver.queueREADY.get(base).jobID) - 1 ;
         }
     }
 }
