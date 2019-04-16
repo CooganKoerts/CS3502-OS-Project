@@ -1,3 +1,4 @@
+
 public class Helpers {
     public static String hex_to_binary(String s)
     {
@@ -12,6 +13,18 @@ public class Helpers {
         }
 
         String val2 = Integer.toBinaryString(val);
+
+        // Left pad with 0s
+        String zeros = "";
+        if (val2.length() < 32)
+        {
+            int zerosToAdd = 32 - val2.length();
+            for (int i = 0; i < zerosToAdd; i++)
+            {
+                zeros += "0";
+            }
+        }
+        val2 = zeros + val2;
         return val2;
     }
 
@@ -39,37 +52,19 @@ public class Helpers {
     }
 
 
-    public static boolean isBinary(String num) {
-        boolean isBinary = false;
-        if (num != null && !num.isEmpty())
-        {
-            long number = (Long) Long.parseLong(num);
-            while (number > 0) {
-                if (number % 10 <= 1) {
-                    isBinary = true;
-                }
-                else {
-                    isBinary = false;
-                    break;
-                }
-                number /= 10;
-            }
-        }
-        return isBinary;
-    }
+    public static int binary_to_decimal(String binary)
+    {
+        System.out.println("binary: " + binary);
 
-    public static int binary_to_decimal(String binary) {
-        int length = binary.length() - 1;
         int decimal = 0;
-        if (isBinary(binary)) {
-            char[] digits = binary.toCharArray();
-            for (char digit : digits) {
-                if (String.valueOf(digit).equals("1")) {
-                    decimal += Math.pow(2, length);
-                }
-                length--;
+        for (int pow = (binary.length()-1); pow > -1; pow--) {
+            if (binary.charAt(pow)=='1'){
+                decimal += (Math.pow(2, (binary.length() - pow - 1)));
             }
         }
+
+        System.out.println("decimal: " + decimal);
+
         return decimal;
     }
 
