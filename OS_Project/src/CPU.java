@@ -62,6 +62,13 @@ public class CPU implements Runnable {
             Execute(opCode);
             programCounter++;
         }
+
+        for (int i = 0; i < Driver.queueREADY.size(); i++) {
+            if (Helpers.hex_to_decimal(Driver.queueREADY.get(i).jobID) == currentJobNum) {
+                Driver.queueREADY.get(i).status = "COMPLETED";
+                Driver.queueREADY.remove(i);
+            }
+        }
     }
 
     /*
@@ -131,10 +138,10 @@ public class CPU implements Runnable {
 
 
     /*
-    * @param: Integer instruction from decode method
-    * Reg-0 is the accumulator
-    * Reg-1 is the zero register
-    * */
+     * @param: Integer instruction from decode method
+     * Reg-0 is the accumulator
+     * Reg-1 is the zero register
+     * */
     public void Execute(Integer inst){
         int operationCode = inst;
 
@@ -433,7 +440,6 @@ public class CPU implements Runnable {
 
     /*
         Param index: takes Index of Job to be loaded in READY queue
-
         "loads" all of the instructions into the cache
      */
     public void setCache(ProcessControlBlock job) {
@@ -443,7 +449,7 @@ public class CPU implements Runnable {
         programCounter = 0;
         priority = Helpers.hex_to_decimal(job.priority);
     }
-    
+
     /*
     Param AddressingMode a: Direct or Indirect
     Param int base: a job's location in the READY queue

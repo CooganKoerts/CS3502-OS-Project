@@ -1,5 +1,3 @@
-
-
 /*
     This class decides which program will be placed into the ready queue next which will then be pulled and accessed by
     the CPU.
@@ -22,6 +20,7 @@ public class Dispatcher {
         Driver.cpu.setCache(job);
         Driver.cpu.currentJobNum = Helpers.hex_to_decimal(job.jobID);
         System.out.println("CPU RUN");
+        job.status = "RUNNING";
         Driver.cpu.run();
     }
 
@@ -43,10 +42,11 @@ public class Dispatcher {
         when a process is interrupted and/or a new process will begin execution contextSwitch will save the state of the
         current process and load the new process into execution and retrieve the previous process when it is time for it
         to begin execution again.
-
         Note: when a process re-enters the ready queue it will need to enter back into the queue based off its priority
     */
-    public static void contextSwitch() {
+    public static void contextSwitch(ProcessControlBlock pcbOLD, ProcessControlBlock pcbNEW) {
         //TODO
+        pcbOLD.status = "BLOCKED";
+        dispatchProcesstoCPU(pcbNEW);
     }
 }
