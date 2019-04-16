@@ -20,6 +20,8 @@ public class Dispatcher {
     public static void dispatchProcesstoCPU(ProcessControlBlock job)
     {
         Driver.cpu.setCache(job);
+        Driver.cpu.currentJobNum = Helpers.hex_to_decimal(job.jobID);
+        System.out.println("CPU RUN");
         Driver.cpu.run();
     }
 

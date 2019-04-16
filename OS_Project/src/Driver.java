@@ -30,7 +30,7 @@ public class Driver {
         Loader.readProgramFile();
         LongScheduler.sendToMemory();
         ShortScheduler.sendToDispatcher();
-
+        ShortScheduler.scheduleJob();
         /*
         for (int i = 0; i < queueNEW.size(); i++) {
             System.out.println("\nJobID: " + hexToDec(queueNEW.get(i).jobID) + "\tNumber of Words: " + hexToDec(queueNEW.get(i).numOfWords));

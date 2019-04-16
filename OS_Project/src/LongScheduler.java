@@ -36,5 +36,6 @@ public class LongScheduler {
             }
             currentPriority++;
         }
+        System.out.println("Scheduled jobs and entered in RAM");
     }
 }

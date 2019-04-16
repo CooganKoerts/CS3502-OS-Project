@@ -33,6 +33,7 @@ public class ShortScheduler {
                 }
             }
         }
+        System.out.println("Add jobs to ready queue");
     }
 
     public static void scheduleJob()
@@ -42,6 +43,7 @@ public class ShortScheduler {
             for (int i = 0; i < Driver.queueREADY.size(); i++)
             {
                 Dispatcher.dispatchProcesstoCPU(Driver.queueREADY.get(i)); // sends one process to be dispatched
+                System.out.println("JOB: " + Driver.queueREADY.get(i).jobID + " dispatched to CPU");
             }
         }
     }

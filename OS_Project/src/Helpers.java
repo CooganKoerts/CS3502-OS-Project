@@ -43,7 +43,7 @@ public class Helpers {
         boolean isBinary = false;
         if (num != null && !num.isEmpty())
         {
-            long number = Long.parseLong(num);
+            long number = (Long) Long.parseLong(num);
             while (number > 0) {
                 if (number % 10 <= 1) {
                     isBinary = true;
