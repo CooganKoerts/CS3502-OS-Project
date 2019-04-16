@@ -53,7 +53,7 @@ public class CPU implements Runnable {
     public void run()
     {
         threadID = Thread.currentThread().getId();
-        System.out.println("Running Job " + currentJobNum + " on thread: " + threadID);
+        System.out.println("Running Job " + currentJobNum + ", priority: " + priority + " on thread: " + threadID);
         // loops through instructions for job stored in cache
         while (programCounter < instructCounter)
         {
@@ -63,12 +63,13 @@ public class CPU implements Runnable {
             programCounter++;
         }
 
-        for (int i = 0; i < Driver.queueREADY.size(); i++) {
+        // Need to adjust this, it messes up looping through list in shortscheduler.schedulejob
+        /*for (int i = 0; i < Driver.queueREADY.size(); i++) {
             if (Helpers.hex_to_decimal(Driver.queueREADY.get(i).jobID) == currentJobNum) {
                 Driver.queueREADY.get(i).status = "COMPLETED";
                 Driver.queueREADY.remove(i);
             }
-        }
+        }*/
     }
 
     /*
@@ -447,6 +448,7 @@ public class CPU implements Runnable {
         //cache = Memory.pullFromRam(Driver.queueREADY.get(index).registers[0]);
         instructCounter = job.registers[2]; // gets num of instruction words for job
         programCounter = 0;
+        currentJobNum = Helpers.hex_to_decimal(job.jobID);
         priority = Helpers.hex_to_decimal(job.priority);
     }
 

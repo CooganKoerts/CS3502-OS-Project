@@ -53,16 +53,12 @@ public class Helpers {
 
     public static int binary_to_decimal(String binary)
     {
-        System.out.println("binary: " + binary);
-
         int decimal = 0;
         for (int pow = (binary.length()-1); pow > -1; pow--) {
             if (binary.charAt(pow)=='1'){
                 decimal += (Math.pow(2, (binary.length() - pow - 1)));
             }
         }
-
-        System.out.println("decimal: " + decimal);
 
         return decimal;
     }
