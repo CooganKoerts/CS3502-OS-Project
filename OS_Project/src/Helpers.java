@@ -1,4 +1,3 @@
-
 public class Helpers {
     public static String hex_to_binary(String s)
     {
