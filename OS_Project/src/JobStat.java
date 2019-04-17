@@ -37,7 +37,7 @@ public class JobStat {
     }
 
     public void setCpuNo(int num) {
-        this.cpuNo = cpuNo;
+        this.cpuNo = num;
     }
 
     public int getWaitTime() {

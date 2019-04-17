@@ -1,7 +1,11 @@
 
 
 
+import java.io.FileWriter;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 
 public class Driver {
@@ -47,6 +51,8 @@ public class Driver {
         LongScheduler.sendToMemory();
         ShortScheduler.sendToDispatcher();
         ShortScheduler.scheduleJob();
+        writeJobStats();
+
         /*
         for (int i = 0; i < queueNEW.size(); i++) {
             System.out.println("\nJobID: " + hexToDec(queueNEW.get(i).jobID) + "\tNumber of Words: " + hexToDec(queueNEW.get(i).numOfWords));
@@ -95,8 +101,35 @@ public class Driver {
     outputs a table of all JobStat data
     most likely in text file
      */
-    private void writeJobStats()
+    public static void writeJobStats()
     {
+        Format format = new SimpleDateFormat("HH:mm:ss:SSS");
+        try
+        {
+            FileWriter writer = new FileWriter(System.getProperty("user.dir") + "/JobStats.txt");
+            writer.write("Job_Number\tRAM_Used\tCPU_No.\tWait_Time\t\tRun_Time\t\tStart_Time"+
+                    "\t\tEnd_Time\t\tWaiting_Start_Time\t\tWaiting_End_Time\t\t#_I/O_Operations");
 
+            for (int i = 0; i < jobStats.length; i++)
+            {
+                Date waitTime = new Date(jobStats[i].getWaitTime());
+                Date runTime = new Date(jobStats[i].getRunTime());
+                Date startTime = new Date(jobStats[i].getStartRunTime());
+                Date endTime = new Date(jobStats[i].getEndRunTime());
+                Date startWait = new Date(jobStats[i].getStartWaitTime());
+                Date endWait = new Date(jobStats[i].getEndWaitTime());
+
+                writer.write("\r\n" + jobStats[i].getJobNumber() + "\t\t\t" + jobStats[i].getBlocksUsed() + "\t\t\t" +
+                        jobStats[i].getCpuNo() + "\t\t" + format.format(waitTime) + "\t" + format.format(runTime) + "\t" +
+                        format.format(startTime) + "\t" + format.format(endTime) +
+                        "\t" + format.format(startWait) + "\t\t\t" + format.format(endWait) + "\t\t\t\t" +
+                        jobStats[i].getI_o_operations());
+            }
+
+            writer.close();
+        }
+        catch (Exception e)
+        {
+        }
     }
 }

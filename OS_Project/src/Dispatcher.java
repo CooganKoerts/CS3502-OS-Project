@@ -20,6 +20,14 @@ public class Dispatcher {
         Driver.cpu.setCache(job);
         System.out.println("CPU RUN");
         job.status = "RUNNING";
+
+        int id = Helpers.hex_to_decimal(job.jobID);
+        Driver.jobStats[id-1].setTimeStamp(System.currentTimeMillis());
+        Driver.jobStats[id-1].setJobNumber(id);
+        Driver.jobStats[id-1].setEndWaitTime(System.currentTimeMillis());
+        Driver.jobStats[id-1].setCpuNo(1);
+        Driver.updateJobStat(Driver.jobStats[id-1]);
+
         Driver.cpu.run();
     }
 

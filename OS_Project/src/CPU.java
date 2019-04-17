@@ -455,7 +455,7 @@ public class CPU implements Runnable {
 
         cache = Memory.pullFromRam(job.registers[0]); // this does same as previous line (below) ?
         //cache = Memory.pullFromRam(Driver.queueREADY.get(index).registers[0]);
-        instructCounter = job.registers[2]; // gets num of instruction words for job
+        instructCounter = Helpers.hex_to_decimal(job.numOfWords);
         programCounter = 0;
         currentJobNum = Helpers.hex_to_decimal(job.jobID);
         priority = Helpers.hex_to_decimal(job.priority);

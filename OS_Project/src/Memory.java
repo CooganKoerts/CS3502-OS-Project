@@ -54,11 +54,13 @@ public class Memory {
             }
         }
 
+
         JobStat stat = new JobStat();
         stat.setTimeStamp(System.currentTimeMillis());
         stat.setJobNumber(jobID);
         stat.setStartWaitTime(stat.getTimeStamp());
         stat.setBlocksUsed(spaceRequired);
+        stat.setCpuNo(1);
         Driver.jobStats[jobID-1].update(stat);
     }
 
