@@ -1,6 +1,7 @@
 
 
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Driver {
@@ -26,8 +27,23 @@ public class Driver {
      */
     public static Disk disk = new Disk();
 
+    /*
+    jobStats holds efficiency statistics for each completed job
+     */
+    public static JobStat[] jobStats;
+
     public static void main(String[] args) {
+        System.out.println("starting OS...");
         Loader.readProgramFile();
+
+        // Initializes a job stat object for each new job
+        jobStats = new JobStat[Driver.queueNEW.size()];
+        // initialize jobStat jobs
+        for (int i = 0; i < jobStats.length; i++)
+        {
+            jobStats[i] = new JobStat();
+        }
+
         LongScheduler.sendToMemory();
         ShortScheduler.sendToDispatcher();
         ShortScheduler.scheduleJob();
@@ -45,6 +61,19 @@ public class Driver {
         } */
     }
 
+    private static int totalWaitTime = 0;
+    private static int totalRunTime = 0;
+
+    public static void updateJobStat(final JobStat stats) {
+        jobStats[stats.getJobNumber()-1].update(stats);
+        if (jobStats[stats.getJobNumber()-1].getWaitTime() > 0) {
+            totalWaitTime +=jobStats[stats.getJobNumber()-1].getWaitTime();
+        }
+        if (jobStats[stats.getJobNumber()-1].getRunTime() > 0) {
+            totalRunTime += jobStats[stats.getJobNumber()-1].getRunTime();
+        }
+    }
+
     /*
         Simple method to convert HexiDecimal values to Decimal values
      */
@@ -60,5 +89,14 @@ public class Driver {
         }
 
         return hexValue;
+    }
+
+    /*
+    outputs a table of all JobStat data
+    most likely in text file
+     */
+    private void writeJobStats()
+    {
+
     }
 }

@@ -32,6 +32,7 @@ public class LongScheduler {
             for (int i = 0; i < Driver.queueNEW.size(); i++) {
                 if (Driver.hexToDec(Driver.queueNEW.get(i).priority) == currentPriority) {
                     Memory.writeToRAM(Driver.hexToDec(Driver.queueNEW.get(i).jobID));
+
                 }
             }
             currentPriority++;

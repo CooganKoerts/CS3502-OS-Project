@@ -53,6 +53,13 @@ public class Memory {
                 Driver.queueNEW.get(i).registers[5] = Driver.queueNEW.get(i).registers[4] + Driver.hexToDec(Driver.queueNEW.get(i).outputBufferSize);
             }
         }
+
+        JobStat stat = new JobStat();
+        stat.setTimeStamp(System.currentTimeMillis());
+        stat.setJobNumber(jobID);
+        stat.setStartWaitTime(stat.getTimeStamp());
+        stat.setBlocksUsed(spaceRequired);
+        Driver.jobStats[jobID-1].update(stat);
     }
 
     /*

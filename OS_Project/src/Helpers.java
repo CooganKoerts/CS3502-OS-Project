@@ -27,29 +27,17 @@ public class Helpers {
         return val2;
     }
 
-    public static int hex_to_decimal(String s)
-    {
+    public static int hex_to_decimal(String s) {
         String digits = "0123456789ABCDEF";
         s = s.toUpperCase();
         int val = 0;
-        for (int i = 0; i < s.length(); i++)
-        {
+        for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
             int d = digits.indexOf(c);
-            val = 16*val + d;
+            val = 16 * val + d;
         }
         return val;
     }
-
-    public static int binary_to_Integer(String binary) {
-        char[] numbers = binary.toCharArray();
-        int result = 0;
-        for(int i=numbers.length - 1; i>=0; i--)
-            if(numbers[i]=='1')
-                result += Math.pow(2, (numbers.length-i - 1));
-        return result;
-    }
-
 
     public static int binary_to_decimal(String binary)
     {
@@ -63,7 +51,7 @@ public class Helpers {
         return decimal;
     }
 
-    public static String binary_to_hexadecimal(String binary) {
+    /*public static String binary_to_hexadecimal(String binary) {
         String hexa = "";
         char[] hex = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a',
                 'b', 'c', 'd', 'e', 'f'};
@@ -75,7 +63,7 @@ public class Helpers {
             }
         }
         return hexa;
-    }
+    }*/
 
     public static String decimal_to_hex(int decimal){
         int sizeOfIntInHalfBytes = 8;
@@ -94,5 +82,31 @@ public class Helpers {
             decimal >>= numberOfBitsInAHalfByte;
         }
         return hexBuilder.toString();
+    }
+
+    public static double getAverageWaitTime() {
+        int jobs = 0;
+        int waitTime = 0;
+        for (JobStat job : Driver.jobStats)
+        {
+            if (job.getWaitTime() > 0) {
+                jobs++;
+                waitTime += job.getWaitTime();
+            }
+        }
+        return (double)waitTime/jobs;
+    }
+
+    public static double getAverageRunTime() {
+        int jobs = 0;
+        int runTime = 0;
+        for (JobStat job : Driver.jobStats)
+        {
+            if (job.getRunTime() > 0) {
+                jobs++;
+                runTime += job.getRunTime();
+            }
+        }
+        return (double)runTime/jobs;
     }
 }

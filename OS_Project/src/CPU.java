@@ -54,6 +54,9 @@ public class CPU implements Runnable {
     {
         threadID = Thread.currentThread().getId();
         System.out.println("Running Job " + currentJobNum + ", priority: " + priority + " on thread: " + threadID);
+        // Collects and updates job stats for this job
+        Driver.jobStats[currentJobNum-1].setStartRunTime(System.currentTimeMillis());
+        Driver.updateJobStat(Driver.jobStats[currentJobNum-1]);
         // loops through instructions for job stored in cache
         while (programCounter < instructCounter)
         {
@@ -63,13 +66,16 @@ public class CPU implements Runnable {
             programCounter++;
         }
 
-        // Need to adjust this, it messes up looping through list in shortscheduler.schedulejob
-        /*for (int i = 0; i < Driver.queueREADY.size(); i++) {
+        Driver.jobStats[currentJobNum-1].setEndRunTime(System.currentTimeMillis());
+        Driver.updateJobStat(Driver.jobStats[currentJobNum-1]);
+
+        // Need to adjust this, REMOVE messes up looping through list in shortscheduler.schedulejob
+        for (int i = 0; i < Driver.queueREADY.size(); i++) {
             if (Helpers.hex_to_decimal(Driver.queueREADY.get(i).jobID) == currentJobNum) {
                 Driver.queueREADY.get(i).status = "COMPLETED";
-                Driver.queueREADY.remove(i);
+                //Driver.queueREADY.remove(i);
             }
-        }*/
+        }
     }
 
     /*
@@ -165,6 +171,7 @@ public class CPU implements Runnable {
                     System.out.println(String.format("RD - Reading from cache[%s] val:%s into R%s", temporary_address/4,
                             Helpers.hex_to_decimal(cache[temporary_address/4].substring(2)), temporary_reg_1));
                 }
+                Driver.jobStats[currentJobNum-1].i_o_operations++;
                 break;
             }
             case 1: //1 WR
@@ -183,6 +190,7 @@ public class CPU implements Runnable {
                             registers[temporary_reg_1], temporary_address/4, cache[temporary_address/4]));
                     //dma write with temporary_address
                 }
+                Driver.jobStats[currentJobNum-1].i_o_operations++;
                 break;
             }
             case 2: //2 ST
@@ -444,6 +452,7 @@ public class CPU implements Runnable {
         "loads" all of the instructions into the cache
      */
     public void setCache(ProcessControlBlock job) {
+
         cache = Memory.pullFromRam(job.registers[0]); // this does same as previous line (below) ?
         //cache = Memory.pullFromRam(Driver.queueREADY.get(index).registers[0]);
         instructCounter = job.registers[2]; // gets num of instruction words for job

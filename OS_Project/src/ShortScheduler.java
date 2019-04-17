@@ -42,6 +42,13 @@ public class ShortScheduler {
         {
             for (int i = 0; i < Driver.queueREADY.size(); i++)
             {
+                int id = Helpers.hex_to_decimal(Driver.queueREADY.get(i).jobID);
+                Driver.jobStats[id-1].setTimeStamp(System.currentTimeMillis());
+                Driver.jobStats[id-1].setJobNumber(id);
+                Driver.jobStats[id-1].setEndWaitTime(System.currentTimeMillis());
+                Driver.jobStats[id-1].setCpuNo(1);
+                Driver.updateJobStat(Driver.jobStats[id-1]);
+
                 System.out.println("JOB: " + Helpers.hex_to_decimal(Driver.queueREADY.get(i).jobID) + " dispatched to CPU");
                 Driver.queueREADY.get(i).status = "RUNNING";
                 Dispatcher.dispatchProcesstoCPU(Driver.queueREADY.get(i)); // sends one process to be dispatched
