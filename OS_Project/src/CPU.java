@@ -62,6 +62,9 @@ public class CPU implements Runnable {
         {
             String instruction = fetch(programCounter);
             int opCode = Decode(instruction);
+
+            updateCpuStat(CPUStat.CPU_STATE.RUNNING, instruction);
+
             Execute(opCode);
             programCounter++;
         }
@@ -453,6 +456,8 @@ public class CPU implements Runnable {
      */
     public void setCache(ProcessControlBlock job) {
 
+        updateCpuStat(CPUStat.CPU_STATE.LOADING, "None");
+
         cache = Memory.pullFromRam(job.registers[0]); // this does same as previous line (below) ?
         //cache = Memory.pullFromRam(Driver.queueREADY.get(index).registers[0]);
         instructCounter = Helpers.hex_to_decimal(job.numOfWords);
@@ -474,6 +479,16 @@ public class CPU implements Runnable {
             // jobID-1 is also coincidentally the jobs position on the disk since everything is loaded in order origianlly.
             return Driver.hexToDec(Driver.queueREADY.get(base).jobID) - 1 ;
         }
+    }
+
+    public void updateCpuStat(CPUStat.CPU_STATE state, String instruct) {
+        CPUStat stat = new CPUStat(cpuNumber);
+        stat.setTotalInstructionNumber(instructCounter);
+        stat.setProgramCounter(programCounter);
+        stat.setCurrentJobNumber(currentJobNum);
+        stat.setCurrentState(state);
+        stat.setCurrentInstruction(instruct);
+        Driver.updateCpuStat(stat);
     }
 
 }

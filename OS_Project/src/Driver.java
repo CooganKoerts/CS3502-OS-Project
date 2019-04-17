@@ -4,7 +4,6 @@
 import java.io.FileWriter;
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -36,8 +35,23 @@ public class Driver {
     jobStats holds efficiency statistics for each completed job
      */
     public static JobStat[] jobStats;
+    /*
+    CpuStats holds data about jobs on CPU
+     */
+    public static CPUStat[] CpuStats;
+    /*
+    CPU number
+     */
+    public static int cpuNumber = 1;
 
     public static void main(String[] args) {
+        writeCpuStatsHEADS();
+        CpuStats = new CPUStat[cpuNumber];
+        for (int i = 0; i < CpuStats.length; i++) {
+            CpuStats[i] = new CPUStat(i+1);
+        }
+
+
         System.out.println("starting OS...");
         int schedule = -1;
         // keeps asking for scheduling algorithm until correct value 0 or 1 is entered
@@ -60,8 +74,19 @@ public class Driver {
         LongScheduler.sendToMemory(schedule);
         ShortScheduler.sendToDispatcher();
         ShortScheduler.scheduleJob();
-        writeJobStats();
 
+        //if (Driver.queueREADY.size() == 0 &&
+        //Driver.queueSUSPENDED.size() == 0)
+        //{
+            writeJobStats();
+            CPUStat stat = new CPUStat(cpuNumber);
+            stat.setTotalInstructionNumber(0);
+            stat.setProgramCounter(0);
+            stat.setCurrentJobNumber(0);
+            stat.setCurrentState(CPUStat.CPU_STATE.IDLE);
+            stat.setCurrentInstruction("None");
+            updateCpuStat(stat);
+        //}
         /*
         for (int i = 0; i < queueNEW.size(); i++) {
             System.out.println("\nJobID: " + hexToDec(queueNEW.get(i).jobID) + "\tNumber of Words: " + hexToDec(queueNEW.get(i).numOfWords));
@@ -87,6 +112,10 @@ public class Driver {
         if (jobStats[stats.getJobNumber()-1].getRunTime() > 0) {
             totalRunTime += jobStats[stats.getJobNumber()-1].getRunTime();
         }
+    }
+
+    public static void updateCpuStat(final CPUStat stat) {
+        CpuStats[stat.cpuNumber-1].update(stat);
     }
 
     /*
@@ -133,6 +162,35 @@ public class Driver {
                         format.format(startTime) + "\t" + format.format(endTime) +
                         "\t" + format.format(startWait) + "\t\t\t" + format.format(endWait) + "\t\t\t\t" +
                         jobStats[i].getI_o_operations());
+            }
+
+            writer.close();
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+    public static void writeCpuStatsHEADS() {
+        try{
+            FileWriter writer = new FileWriter(System.getProperty("user.dir") + "/CpuStats.txt");
+            writer.write("CPU_Number\tJob_Number\tInstruction_Number\tCPU_State");
+            writer.close();
+        }
+        catch(Exception e) {
+
+        }
+    }
+
+    public static void writeCpuStats() {
+        try
+        {
+            FileWriter writer = new FileWriter(System.getProperty("user.dir") + "/CpuStats.txt", true);
+
+            for (int i = 0; i < CpuStats.length; i++)
+            {
+                writer.write("\r\n" + CpuStats[i].cpuNumber + "\t\t\t" + CpuStats[i].getCurrentJobNumber() + "\t\t\t" +
+                        CpuStats[i].getProgramCounter() + "\t\t\t\t\t" + CpuStats[i].getCurrentState());
             }
 
             writer.close();
