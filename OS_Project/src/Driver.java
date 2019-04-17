@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 public class Driver {
 
@@ -38,8 +39,16 @@ public class Driver {
 
     public static void main(String[] args) {
         System.out.println("starting OS...");
-        Loader.readProgramFile();
+        int schedule = -1;
+        // keeps asking for scheduling algorithm until correct value 0 or 1 is entered
+        while (schedule != 0 && schedule != 1)
+        {
+            Scanner reader = new Scanner(System.in);
+            System.out.println("SCHEDULING ALGORITHM (0 = priority, 1 = FIFO): ");
+            schedule = reader.nextInt();
+        }
 
+        Loader.readProgramFile();
         // Initializes a job stat object for each new job
         jobStats = new JobStat[Driver.queueNEW.size()];
         // initialize jobStat jobs
@@ -48,7 +57,7 @@ public class Driver {
             jobStats[i] = new JobStat();
         }
 
-        LongScheduler.sendToMemory();
+        LongScheduler.sendToMemory(schedule);
         ShortScheduler.sendToDispatcher();
         ShortScheduler.scheduleJob();
         writeJobStats();

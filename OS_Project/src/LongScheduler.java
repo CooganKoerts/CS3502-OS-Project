@@ -27,16 +27,29 @@ public class LongScheduler {
                                                    24, 16, 30, 12, 25, 27, 10, 22, 13, 18, 8
      */
 
-    public static void sendToMemory() {
-        while (currentPriority <= 16) {
-            for (int i = 0; i < Driver.queueNEW.size(); i++) {
-                if (Driver.hexToDec(Driver.queueNEW.get(i).priority) == currentPriority) {
-                    Memory.writeToRAM(Driver.hexToDec(Driver.queueNEW.get(i).jobID));
+    public static void sendToMemory(int schedulingAlg) {
+        switch (schedulingAlg) {
+            case 0: { // priority
+                while (currentPriority <= 16) {
+                    for (int i = 0; i < Driver.queueNEW.size(); i++) {
+                        if (Driver.hexToDec(Driver.queueNEW.get(i).priority) == currentPriority) {
+                            Memory.writeToRAM(Driver.hexToDec(Driver.queueNEW.get(i).jobID));
 
+                        }
+                    }
+                    currentPriority++;
                 }
+                System.out.println("Scheduled jobs and entered in RAM");
+                break;
             }
-            currentPriority++;
+            case 1: {
+                for (int i = 0; i < Driver.queueNEW.size(); i++) {
+                    Memory.writeToRAM(Driver.hexToDec(Driver.queueNEW.get(i).jobID));
+                }
+                System.out.println("Scheduled jobs and entered in RAM");
+                break;
+            }
         }
-        System.out.println("Scheduled jobs and entered in RAM");
+
     }
 }
