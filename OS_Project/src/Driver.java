@@ -144,7 +144,7 @@ public class Driver {
         Format format = new SimpleDateFormat("HH:mm:ss:SSS");
         try
         {
-            FileWriter writer = new FileWriter(System.getProperty("user.dir") + "/JobStats.txt");
+            FileWriter writer = new FileWriter("src/JobStats.txt");
             writer.write("Job_Number\tRAM_Used\tCPU_No.\tWait_Time\t\tRun_Time\t\tStart_Time"+
                     "\t\tEnd_Time\t\tWaiting_Start_Time\t\tWaiting_End_Time\t\t#_I/O_Operations");
 
@@ -173,7 +173,7 @@ public class Driver {
 
     public static void writeCpuStatsHEADS() {
         try{
-            FileWriter writer = new FileWriter(System.getProperty("user.dir") + "/CpuStats.txt");
+            FileWriter writer = new FileWriter("src/CpuStats.txt");
             writer.write("CPU_Number\tJob_Number\tInstruction_Number\tCPU_State");
             writer.close();
         }
@@ -185,7 +185,7 @@ public class Driver {
     public static void writeCpuStats() {
         try
         {
-            FileWriter writer = new FileWriter(System.getProperty("user.dir") + "/CpuStats.txt", true);
+            FileWriter writer = new FileWriter("src/CpuStats.txt", true);
 
             for (int i = 0; i < CpuStats.length; i++)
             {

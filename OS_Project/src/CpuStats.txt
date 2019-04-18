@@ -1,4 +1,4 @@
-
+CPU_Number	Job_Number	Instruction_Number	CPU_State
 1			0			0					Loading
 1			19			0					Running
 1			19			1					Running

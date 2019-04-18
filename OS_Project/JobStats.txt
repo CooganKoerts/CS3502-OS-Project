@@ -1,1 +1,0 @@
-Job_Number	RAM_Used	CPU_No.	Wait_Time		Run_Time		Start_Time		End_Time		Waiting_Start_Time		Waiting_End_Time		#_I/O_Operations
