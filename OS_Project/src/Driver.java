@@ -53,6 +53,7 @@ public class Driver {
 
 
         System.out.println("starting OS...");
+        PCBList.PCBList();
         int schedule = -1;
         // keeps asking for scheduling algorithm until correct value 0 or 1 is entered
         while (schedule != 0 && schedule != 1)
@@ -86,6 +87,7 @@ public class Driver {
             stat.setCurrentState(CPUStat.CPU_STATE.IDLE);
             stat.setCurrentInstruction("None");
             updateCpuStat(stat);
+            writeCoreDump();
         //}
         /*
         for (int i = 0; i < queueNEW.size(); i++) {
@@ -199,4 +201,47 @@ public class Driver {
         {
         }
     }
+
+    public static void writeCoreDump() {
+        try{
+            FileWriter writer = new FileWriter(System.getProperty("user.dir") + "/CoreDump.txt");
+
+            for (int i = 0; i < Memory.getRAMSize(); i++) {
+                String[] RAMblock = Memory.pullFromRam(i);
+                ProcessControlBlock pcb = new ProcessControlBlock("","","",
+                        "","","");
+
+                for (int j = 0; j < PCBList.getJobAmount(); j++)
+                {
+                    if (PCBList.getPCB(j).registers[0] == i) {
+                        //writer.write("\nJOB " + j);
+                        pcb = PCBList.getPCB(j);
+                    }
+                }
+                writer.write("\nJOB " + hexToDec(pcb.jobID) + " BINARY - ");
+                for (int k = 0; k < pcb.registers[1]; k++) {
+                    writer.write("\n" + RAMblock[k]);
+                }
+                writer.write("\nJOB " + hexToDec(pcb.jobID) + " INPUT - ");
+                for (int l = pcb.registers[1]+1; l < pcb.registers[4]; l++) {
+                    writer.write("\n" + RAMblock[l]);
+                }
+                writer.write("\nJOB " + hexToDec(pcb.jobID) + " OUTPUT - ");
+                for (int m = pcb.registers[4]+1; m < pcb.registers[5]; m++) {
+                    writer.write("\n" + RAMblock[m]);
+                }
+                writer.write("\nJOB " + hexToDec(pcb.jobID) + " TEMP - ");
+                for (int n = pcb.registers[5]+1; n < RAMblock.length; n++) {
+                    writer.write("\n" + RAMblock[n]);
+                }
+            }
+
+            writer.close();
+        }
+        catch(Exception ex) {
+
+        }
+
+    }
+
 }

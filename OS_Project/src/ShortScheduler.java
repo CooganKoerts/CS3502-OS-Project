@@ -22,6 +22,11 @@ public class ShortScheduler {
 
         if (Driver.queueSUSPENDED.size() == 0 & Driver.queueWAITING.size() == 0) {
             for (int i = 0; i < Memory.getRAMSize(); i++) {
+                for (int k = 0; k < PCBList.getJobAmount(); k++) {
+                    if (PCBList.getPCB(k).registers[0] == i) {
+                        PCBList.getPCB(k).status = "READY";
+                    }
+                }
                 for (int j = 0; j < Driver.queueNEW.size(); j++) {
                     // 'i' is the current index of the RAM memory block and registers[0] is the record of which
                     // memory block a process is stored in. If registers[0] == i, set the process as READY and

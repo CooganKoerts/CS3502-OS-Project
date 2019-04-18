@@ -77,6 +77,7 @@ public class Loader {
         outputBuff = splitLine[8];
         tempBuff = splitLine[9];
 
+        PCBList.insertPCB(new ProcessControlBlock(jobID, numOfWords, priority_num, inputBuff, outputBuff, tempBuff));
         Driver.queueNEW.add(new ProcessControlBlock(jobID, numOfWords, priority_num, inputBuff, outputBuff, tempBuff));
     }
 

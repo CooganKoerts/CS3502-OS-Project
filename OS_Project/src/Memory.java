@@ -53,6 +53,17 @@ public class Memory {
                 Driver.queueNEW.get(i).registers[5] = Driver.queueNEW.get(i).registers[4] + Driver.hexToDec(Driver.queueNEW.get(i).outputBufferSize);
             }
         }
+        for (int i = 0; i < PCBList.getJobAmount(); i++) {
+            if (jobID == Driver.hexToDec(PCBList.getPCB(i).jobID)) {
+                PCBList.getPCB(i).registers[0] = blockToWrite;
+                PCBList.getPCB(i).registers[1] = Driver.hexToDec(PCBList.getPCB(i).numOfWords);
+                PCBList.getPCB(i).registers[2] = RAM[blockToWrite].length-1;
+                PCBList.getPCB(i).registers[3] = Driver.hexToDec(PCBList.getPCB(i).numOfWords);
+                PCBList.getPCB(i).registers[4] = PCBList.getPCB(i).registers[3] + Driver.hexToDec(PCBList.getPCB(i).inputBufferSize);
+                PCBList.getPCB(i).registers[5] = PCBList.getPCB(i).registers[4] + Driver.hexToDec(PCBList.getPCB(i).outputBufferSize);;
+
+            }
+        }
 
 
         JobStat stat = new JobStat();

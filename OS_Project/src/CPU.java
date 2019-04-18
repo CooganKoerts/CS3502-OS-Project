@@ -76,9 +76,9 @@ public class CPU implements Runnable {
         for (int i = 0; i < Driver.queueREADY.size(); i++) {
             if (Helpers.hex_to_decimal(Driver.queueREADY.get(i).jobID) == currentJobNum) {
                 Driver.queueREADY.get(i).status = "COMPLETED";
-                //Driver.queueREADY.remove(i);
             }
         }
+        PCBList.getPCB(currentJobNum-1).status = "COMPLETED";
     }
 
     /*
