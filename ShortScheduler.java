@@ -22,6 +22,11 @@ public class ShortScheduler {
 
         if (Driver.queueSUSPENDED.size() == 0 & Driver.queueWAITING.size() == 0) {
             for (int i = 0; i < Memory.getRAMSize(); i++) {
+                for (int k = 0; k < PCBList.getJobAmount(); k++) {
+                    if (PCBList.getPCB(k).registers[0] == i) {
+                        PCBList.getPCB(k).status = "READY";
+                    }
+                }
                 for (int j = 0; j < Driver.queueNEW.size(); j++) {
                     // 'i' is the current index of the RAM memory block and registers[0] is the record of which
                     // memory block a process is stored in. If registers[0] == i, set the process as READY and
@@ -31,6 +36,19 @@ public class ShortScheduler {
                         Dispatcher.sendToReadyQueue(Driver.queueNEW.get(j));
                     }
                 }
+            }
+        }
+        System.out.println("Add jobs to ready queue");
+    }
+
+    public static void scheduleJob()
+    {
+        if (Driver.queueREADY.size() > 0)
+        {
+            for (int i = 0; i < Driver.queueREADY.size(); i++)
+            {
+                System.out.println("JOB: " + Helpers.hex_to_decimal(Driver.queueREADY.get(i).jobID) + " dispatched to CPU");
+                Dispatcher.dispatchProcesstoCPU(Driver.queueREADY.get(i)); // sends one process to be dispatched
             }
         }
     }

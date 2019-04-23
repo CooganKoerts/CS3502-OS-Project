@@ -18,7 +18,7 @@ public class Loader {
         String attributes = "";
         BufferedReader reader;
         try {
-            reader = new BufferedReader(new FileReader("ProgramFile.txt"));
+            reader = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/OS_Project/ProgramFile.txt"));
             String line;
             int jobID = 0, k = 0;
             while ((line = reader.readLine()) != null) {
@@ -52,6 +52,8 @@ public class Loader {
             e.printStackTrace();
         }
 
+        System.out.println("Program File Loaded");
+
     } // end of readProgramFile()
 
     /*
@@ -75,7 +77,9 @@ public class Loader {
         outputBuff = splitLine[8];
         tempBuff = splitLine[9];
 
+        PCBList.insertPCB(new ProcessControlBlock(jobID, numOfWords, priority_num, inputBuff, outputBuff, tempBuff));
         Driver.queueNEW.add(new ProcessControlBlock(jobID, numOfWords, priority_num, inputBuff, outputBuff, tempBuff));
+        Driver.queueTEST.add(new ProcessControlBlock(jobID, numOfWords, priority_num, inputBuff, outputBuff, tempBuff));
     }
 
     // Method for retrieving the JobID to help with
