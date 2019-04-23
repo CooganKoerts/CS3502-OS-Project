@@ -1,53 +1,96 @@
 /*
 
     This class builds the registers that will be used by the operating system
+    and accesses RAM.
+
+    Note: This is the only class that can DIRECTLY access and manipulate the RAM.
+          This class also acts as the "Memory Manager".
+
 
  */
 
 public class Memory {
-    private int[] registers;
-    private char[] disk; //TODO
-    //Ram ram; //TODO
-    //TODO: simulated RAM & simulated hard drive called 'disk'
+    // Simulated RAM, programs will be stored here based off priority
+    private static String[][] RAM = new String[30][];
 
-    public Memory() {
-    }
+    /*
+        Write program from disk to RAM based off the physical address of the program
+        stored on the disk. memoryAddress coincidently is also the JobID of the program due to the way the Disk
+        is structured.
+     */
+    public static void writeToRAM(int jobID) {
+        int spaceRequired = 0;
+        int blockToWrite = 0; // default value, will be changed
 
-    public Memory(int numOfRegisters) {
-        registers = new int[numOfRegisters];
-        //disk
-        //ram
-    }
-
-    public int[] getRegisters() {
-        return registers;
-    }
-
-    public char[] getDisk() {
-        return disk;
-    }
-
-    public void setRegisters(int numOfRegisters) {
-        registers = new int[numOfRegisters];
-    }
-
-    /* public void setDisk(char disk) {
-        //TODO
-    } */
-
-    public int sizeOfMemory() {
-        return registers.length;
-    }
-
-    public int getDiskSize() {
-        return disk.length;
-    }
-
-    public void writeToMemory(int memAddress, int n) {
-        if (memAddress >= sizeOfMemory()) {
-            System.out.println("No address available (Memory Address specified is too high)");
-        } else {
-            registers[memAddress] = n;
+        // find how much space to allocate in RAM
+        for (int i = 0; Driver.disk.getDiskMemory()[jobID-1][i] != null; i++) {
+            spaceRequired++;
         }
+
+        // find which block has not been initialized and write the program to that block
+        // this is to insure we do not overwrite any already existing data
+        for (int i = 0; i < RAM.length; i++) {
+            if (RAM[i] == null) {
+                RAM[i] = new String[spaceRequired];
+                blockToWrite = i;
+                break;
+            }
+        }
+
+        // this loop writes to the actual RAM
+        for (int i = 0; i < RAM[blockToWrite].length; i++) {
+            RAM[blockToWrite][i] = Driver.disk.getDiskMemory()[jobID-1][i];
+        }
+
+        // This loop sets the registers in the programs PCB
+        for (int i = 0; i < Driver.queueNEW.size(); i++) {
+            if (jobID == Driver.hexToDec(Driver.queueNEW.get(i).jobID)) {
+                Driver.queueNEW.get(i).registers[0] = blockToWrite;
+                Driver.queueNEW.get(i).registers[1] = Driver.hexToDec(Driver.queueNEW.get(i).numOfWords);
+                Driver.queueNEW.get(i).registers[2] = RAM[blockToWrite].length-1;
+                Driver.queueNEW.get(i).registers[3] = Driver.hexToDec(Driver.queueNEW.get(i).numOfWords);
+                Driver.queueNEW.get(i).registers[4] = Driver.queueNEW.get(i).registers[3] + Driver.hexToDec(Driver.queueNEW.get(i).inputBufferSize);
+                Driver.queueNEW.get(i).registers[5] = Driver.queueNEW.get(i).registers[4] + Driver.hexToDec(Driver.queueNEW.get(i).outputBufferSize);
+            }
+        }
+        for (int i = 0; i < PCBList.getJobAmount(); i++) {
+            if (jobID == Driver.hexToDec(PCBList.getPCB(i).jobID)) {
+                PCBList.getPCB(i).registers[0] = blockToWrite;
+                PCBList.getPCB(i).registers[1] = Driver.hexToDec(PCBList.getPCB(i).numOfWords);
+                PCBList.getPCB(i).registers[2] = RAM[blockToWrite].length-1;
+                PCBList.getPCB(i).registers[3] = Driver.hexToDec(PCBList.getPCB(i).numOfWords);
+                PCBList.getPCB(i).registers[4] = PCBList.getPCB(i).registers[3] + Driver.hexToDec(PCBList.getPCB(i).inputBufferSize);
+                PCBList.getPCB(i).registers[5] = PCBList.getPCB(i).registers[4] + Driver.hexToDec(PCBList.getPCB(i).outputBufferSize);
+            }
+        }
+
+
+        JobStat stat = new JobStat();
+        stat.setTimeStamp(System.currentTimeMillis());
+        stat.setJobNumber(jobID);
+        stat.setStartWaitTime(stat.getTimeStamp());
+        stat.setBlocksUsed(spaceRequired);
+        stat.setCpuNo(1);
+        Driver.jobStats[jobID-1].update(stat);
     }
+
+    /*
+        This method pulls the contents from a block in the RAM and returns that job data
+     */
+    public static String[] pullFromRam(int block) {
+        return RAM[block];
+    }
+
+    /*
+        This method is mainly used for testing
+     */
+    public static String[][] getRAM() {
+        return RAM;
+    }
+
+    public static int getRAMSize() { return RAM.length; }
 }
+
+/*
+    Order in RAM: 19, 29, 1, 9, 14, 20, 5, 11, 28, 2, 17, 21, 26, 4, 7, 15, 23, 3, 6, 24, 16, 30, 12, 25, 27, 10, 22, 13, 18, 8
+*/
