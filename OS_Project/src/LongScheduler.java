@@ -23,10 +23,15 @@ public class LongScheduler {
      */
 
     /*
-            Positions in RAM when done should be : 19, 29,1, 9, 14, 20, 5, 11, 28, 2, 17, 21, 26, 4, 7, 15, 23, 3, 6,
-                                                   24, 16, 30, 12, 25, 27, 10, 22, 13, 18, 8
+            Positions in RAM when done with priority should be : 19, 29,1, 9, 14, 20, 5, 11, 28, 2, 17, 21, 26, 4, 7,
+                                                                 15, 23, 3, 6, 24, 16, 30, 12, 25, 27, 10, 22, 13, 18, 8
      */
 
+    /*
+            case 0: Priority
+            case 1: First Come First Serve (FCFS)
+            case 2: Shortest Job First (SJF)
+     */
     public static void sendToMemory(int schedulingAlg) {
         switch (schedulingAlg) {
             case 0: { // priority
@@ -42,9 +47,28 @@ public class LongScheduler {
                 System.out.println("Scheduled jobs and entered in RAM");
                 break;
             }
-            case 1: {
+            case 1: { // FCFS
                 for (int i = 0; i < Driver.queueNEW.size(); i++) {
                     Memory.writeToRAM(Driver.hexToDec(Driver.queueNEW.get(i).jobID));
+                }
+                System.out.println("Scheduled jobs and entered in RAM");
+                break;
+            }
+            case 2: { // SJF
+                int currentJobSize = Driver.queueNEW.get(0).jobSize;
+                // first find the smallest job size;
+                for (int i = 0; i < Driver.queueNEW.size(); i++) {
+                    if (Driver.queueNEW.get(i).jobSize < currentJobSize) {
+                        currentJobSize = Driver.queueNEW.get(i).jobSize;
+                    }
+                }
+                while (currentJobSize <= 72) {
+                    for (int i = 0; i < Driver.queueNEW.size(); i++) {
+                        if (Driver.queueNEW.get(i).jobSize == currentJobSize) {
+                            Memory.writeToRAM(Driver.hexToDec(Driver.queueNEW.get(i).jobID));
+                        }
+                    }
+                    currentJobSize++;
                 }
                 System.out.println("Scheduled jobs and entered in RAM");
                 break;

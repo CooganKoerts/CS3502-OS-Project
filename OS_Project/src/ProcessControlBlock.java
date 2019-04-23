@@ -11,6 +11,7 @@ public class ProcessControlBlock {
     String outputBufferSize; // hex number
     String tempBufferSize; // hex number
     int programCounter;
+    int jobSize;
 
     String status; // "RUNNING", "READY", "BLOCKED", "NEW", "COMPLETED"
 
@@ -35,5 +36,8 @@ public class ProcessControlBlock {
         this.outputBufferSize = output_buffer_size;
         this.tempBufferSize = temp_buffer_size;
         this.status = "NEW";
+
+        jobSize = Driver.hexToDec(numOfWords) + Driver.hexToDec(inputBufferSize) + Driver.hexToDec(outputBufferSize) +
+                  Driver.hexToDec(tempBufferSize);
     }
 }

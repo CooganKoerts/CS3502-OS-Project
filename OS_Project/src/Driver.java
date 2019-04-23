@@ -26,6 +26,8 @@ public class Driver {
     public static LinkedList<ProcessControlBlock> queueSUSPENDED = new LinkedList<ProcessControlBlock>();
     public static CPU cpu = new CPU(1); // will be CPU[] cpus when multiprocessor is implemented
 
+    public static LinkedList<ProcessControlBlock> queueTEST = new LinkedList<ProcessControlBlock>();
+
     /*
         Disk object to simulate the hard drive that programs will be loaded into
      */
@@ -56,10 +58,10 @@ public class Driver {
         PCBList.PCBList();
         int schedule = -1;
         // keeps asking for scheduling algorithm until correct value 0 or 1 is entered
-        while (schedule != 0 && schedule != 1)
+        while (schedule != 0 && schedule != 1 && schedule != 2)
         {
             Scanner reader = new Scanner(System.in);
-            System.out.println("SCHEDULING ALGORITHM (0 = priority, 1 = FIFO): ");
+            System.out.println("SCHEDULING ALGORITHM (0 = Priority, 1 = FCFS, 2 = SJF): ");
             schedule = reader.nextInt();
         }
 
@@ -89,18 +91,15 @@ public class Driver {
             updateCpuStat(stat);
             writeCoreDump();
         //}
-        /*
-        for (int i = 0; i < queueNEW.size(); i++) {
-            System.out.println("\nJobID: " + hexToDec(queueNEW.get(i).jobID) + "\tNumber of Words: " + hexToDec(queueNEW.get(i).numOfWords));
-            for (int j = 0; j < Memory.getRAM()[queueNEW.get(i).registers[0]].length; j++) {
-                if (j == queueNEW.get(i).registers[1]) {
-                    System.out.println("DATA");
-                    System.out.println(Memory.getRAM()[queueNEW.get(i).registers[0]][j]);
-                } else {
-                    System.out.println(Memory.getRAM()[queueNEW.get(i).registers[0]][j]);
-                }
-            }
-        } */
+
+        //Code for testing below this line.
+        /*System.out.println("\n\n\n");
+        for (int i = 0; i < Driver.queueTEST.size(); i++) {
+            System.out.println("JobID: " + Driver.hexToDec(Driver.queueTEST.get(i).jobID) +
+                       "\tSize Of Job: " + Driver.queueTEST.get(i).jobSize);
+        }*/
+
+
     }
 
     private static int totalWaitTime = 0;

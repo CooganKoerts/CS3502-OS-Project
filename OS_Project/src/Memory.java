@@ -60,8 +60,7 @@ public class Memory {
                 PCBList.getPCB(i).registers[2] = RAM[blockToWrite].length-1;
                 PCBList.getPCB(i).registers[3] = Driver.hexToDec(PCBList.getPCB(i).numOfWords);
                 PCBList.getPCB(i).registers[4] = PCBList.getPCB(i).registers[3] + Driver.hexToDec(PCBList.getPCB(i).inputBufferSize);
-                PCBList.getPCB(i).registers[5] = PCBList.getPCB(i).registers[4] + Driver.hexToDec(PCBList.getPCB(i).outputBufferSize);;
-
+                PCBList.getPCB(i).registers[5] = PCBList.getPCB(i).registers[4] + Driver.hexToDec(PCBList.getPCB(i).outputBufferSize);
             }
         }
 
