@@ -6,6 +6,7 @@
     Note: This is the only class that can DIRECTLY access and manipulate the RAM.
           This class also acts as the "Memory Manager".
 
+    Note: total # of words is 2027
 
  */
 

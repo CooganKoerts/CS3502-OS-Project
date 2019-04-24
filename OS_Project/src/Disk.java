@@ -15,7 +15,7 @@ public class Disk {
     // Each row is symbolic of a memory block
     // There is supposed to be (2048 words * 4 bytes per word) 8192 bytes in size
     // Each memory block (row) has an evenly split up amount of bytes (256).
-    private static String[][] diskMemory = new String[32][256];
+    private static String[][] diskMemory = new String[30][100];
 
     public void addToDisk(int jobID, int index, String words) {
         diskMemory[jobID-1][index] = words;

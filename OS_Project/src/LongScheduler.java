@@ -76,4 +76,31 @@ public class LongScheduler {
         }
 
     }
+
+    public static void loadDiskPages() {
+        int k = 0; // row counter of Disk
+        int l = 0; // column counter of Disk
+        for (int i = 0; i < 512; i++) {
+            for (int j = 0; j < 4; j++) {
+                Driver.diskPages.getDiskPages()[i][j] = Driver.disk.getDiskMemory()[k][l];
+                l++;
+                if (l == 0) { // store starting location of a job
+                    for (int m = 0; m < Driver.queueNEW.size(); m++) {
+                        if (Driver.hexToDec(Driver.queueNEW.get(m).jobID) == k+1) {
+                            Driver.queueNEW.get(m).startLocationInDiskPages[0] = i;
+                            Driver.queueNEW.get(m).startLocationInDiskPages[1] = j;
+                            break;
+                        }
+                    }
+                } else if (l == Driver.disk.getDiskMemory()[k].length) { //check to see if we are moving blocks
+                    k++;
+                    l = 0;
+                }
+            }
+
+            // break loop when we reach the end of the Disk
+            if (k == 30 && Driver.disk.getDiskMemory()[k][l] == null) { break; }
+        }
+    }
+
 }

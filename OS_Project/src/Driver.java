@@ -34,15 +34,22 @@ public class Driver {
     public static Disk disk = new Disk();
 
     /*
-    jobStats holds efficiency statistics for each completed job
+        DiskPages object that represents a paging system for Phase 2
+     */
+    public static DiskPages diskPages = new DiskPages();
+
+    /*
+        jobStats holds efficiency statistics for each completed job
      */
     public static JobStat[] jobStats;
+
     /*
-    CpuStats holds data about jobs on CPU
+        CpuStats holds data about jobs on CPU
      */
     public static CPUStat[] CpuStats;
+
     /*
-    CPU number
+        CPU number
      */
     public static int cpuNumber = 1;
 
@@ -74,6 +81,32 @@ public class Driver {
             jobStats[i] = new JobStat();
         }
 
+        /*
+            Send the content of the Disk into Disk pages HERE
+         */
+
+
+        LongScheduler.loadDiskPages();
+
+        /* TESTING DISK PAGES
+        int counter;
+        for (int i = 0; i < queueNEW.size(); i++) {
+            System.out.println("\nJob ID: " + hexToDec(queueNEW.get(i).jobID));
+            counter = 0;
+
+
+            for (int j = queueNEW.get(i).startLocationInDiskPages[0]; j < 512 && counter != queueNEW.get(i).jobSize; j++) {
+                for (int k = queueNEW.get(i).startLocationInDiskPages[1]; k < 4 && counter != queueNEW.get(i).jobSize; k++) {
+                    if (counter == hexToDec(queueNEW.get(i).numOfWords)) {
+                        System.out.println("DATA");
+                    }
+                    System.out.println(diskPages.getDiskPages()[j][k]);
+                    counter++;
+                }
+            }
+
+        }
+        */
         LongScheduler.sendToMemory(schedule);
         ShortScheduler.sendToDispatcher();
         ShortScheduler.scheduleJob();
@@ -93,12 +126,11 @@ public class Driver {
         //}
 
         //Code for testing below this line.
-        /*System.out.println("\n\n\n");
+        int totalNumOfWords = 0;
         for (int i = 0; i < Driver.queueTEST.size(); i++) {
-            System.out.println("JobID: " + Driver.hexToDec(Driver.queueTEST.get(i).jobID) +
-                       "\tSize Of Job: " + Driver.queueTEST.get(i).jobSize);
-        }*/
-
+            totalNumOfWords += Driver.queueTEST.get(i).jobSize;
+        }
+        System.out.println("\n\n\nTotal number of Words: " + totalNumOfWords);
 
     }
 

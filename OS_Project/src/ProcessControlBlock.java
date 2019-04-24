@@ -3,6 +3,8 @@
     Queue of PCBs initialized in Loader
  */
 
+import java.util.LinkedList;
+
 public class ProcessControlBlock {
     String jobID; // hex number
     String numOfWords; // hex number
@@ -15,6 +17,8 @@ public class ProcessControlBlock {
 
     String status; // "RUNNING", "READY", "BLOCKED", "NEW", "COMPLETED"
 
+    String[] wordList;
+
     /*
         registers[ ] is an array representing the registers in the PCB that holds six values:
         registers[0] = Location of "block"/row index that the Job is located in the RAM. This acts as the Base-Register
@@ -25,6 +29,14 @@ public class ProcessControlBlock {
         registers[5] = Location of the start of temp buffer
      */
     int[] registers = new int[6];
+
+    /*
+        This 2D String array represents the virtual pages that all of the contents of the Job will be stored in. Each
+        row will represent a "page" and each page can only contain 4 words, thus the row length will be of size 4. Made
+        20 rows for simplicity.
+    */
+    String[][] virtualPages = new String[20][4];
+    int[] startLocationInDiskPages = new int[2];
 
     public ProcessControlBlock(String job_id, String num_of_words, String _priority, String input_buffer_size,
                                String output_buffer_size, String temp_buffer_size)
@@ -39,5 +51,29 @@ public class ProcessControlBlock {
 
         jobSize = Driver.hexToDec(numOfWords) + Driver.hexToDec(inputBufferSize) + Driver.hexToDec(outputBufferSize) +
                   Driver.hexToDec(tempBufferSize);
+
+        wordList = new String[jobSize];
+        loadWordList();
+        loadVirtualPages();
+    }
+
+    private void loadWordList() {
+        wordList = Driver.disk.getDiskMemory()[Driver.hexToDec(jobID)-1];
+    }
+
+    private void loadVirtualPages() {
+        int counter = 0;
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 4; j++) {
+                virtualPages[i][j] = wordList[counter];
+                counter++;
+                if (counter == jobSize) {
+                    break;
+                }
+            }
+            if (counter == jobSize) {
+                break;
+            }
+        }
     }
 }
