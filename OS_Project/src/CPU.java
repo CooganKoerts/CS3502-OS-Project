@@ -1,6 +1,10 @@
-/*
+package OS_Project.src;/*
     This is our CPU file
  */
+
+import com.sun.deploy.ref.Helpers;
+
+import java.sql.Driver;
 
 public class CPU implements Runnable {
 
@@ -159,8 +163,8 @@ public class CPU implements Runnable {
 
         switch (operationCode)
         {
-            // Inst: RD Type: I/0
-            case 0:
+            // Inst: READ Type: I/0
+            case 0: //00 RD
             {
                 if(temporary_reg_2 > 0)
                 {
@@ -177,9 +181,10 @@ public class CPU implements Runnable {
                 Driver.jobStats[currentJobNum-1].i_o_operations++;
                 break;
             }
-            case 1: //1 WR
+            // Inst: WRITE Type: I/0
+            case 1: //01 WR
             {
-                //IO write
+
                 if(temporary_reg_2 > 0)
                 {
                     registers[temporary_reg_2] =registers[temporary_reg_1];
@@ -196,7 +201,8 @@ public class CPU implements Runnable {
                 Driver.jobStats[currentJobNum-1].i_o_operations++;
                 break;
             }
-            case 2: //2 ST
+            // Inst: STORE Type: Compute Only
+            case 2: //02 ST
             {
                 cache[registers[temporary_Dst_reg]/4] = "0x" + Helpers.decimal_to_hex( registers[temporary_breg]);
                 System.out.println(String.format("ST - Storing from R%s val:%s into cache[%s] val:%s", temporary_breg,
@@ -204,7 +210,8 @@ public class CPU implements Runnable {
                         cache[registers[temporary_Dst_reg]/4]));
                 break;
             }
-            case 3: //LW
+            // Inst: LOAD Type: Compute Only
+            case 3: //03 LW
             {
                 registers[temporary_Dst_reg]= Helpers.hex_to_decimal(cache[(registers[temporary_breg]/4) + temporary_address].substring(2));
                 System.out.println(String.format("LW - loading from cache[%s] val:%s into R%s val:%s",
@@ -212,13 +219,15 @@ public class CPU implements Runnable {
                         temporary_Dst_reg, registers[temporary_Dst_reg]));
                 break;
             }
-            case 4: //MOV
+            // Inst: MOVE Type: Compute Only
+            case 4: //04 MOV
             {
                 registers[temporary_Dst_reg]=registers[temporary_breg];
                 System.out.println(String.format("MOV - Move from R%s val:%s R%s", temporary_breg, registers[temporary_breg], temporary_Dst_reg));
                 break;
             }
-            case 5: //ADD
+            // Inst: ADD Type: Compute Only
+            case 5: //05 ADD
             {
                 registers[temporary_Dst_reg]=registers[temporary_sreg1];
                 registers[temporary_Dst_reg]+=registers[temporary_sreg2];
@@ -227,7 +236,8 @@ public class CPU implements Runnable {
                         temporary_Dst_reg, registers[temporary_Dst_reg]));
                 break;
             }
-            case 6: //SUB
+            // Inst: SUBTRACT Type: Compute Only
+            case 6: //06 SUB
             {
                 registers[temporary_Dst_reg]=registers[temporary_sreg1];
                 registers[temporary_Dst_reg]=registers[temporary_Dst_reg]-registers[temporary_sreg2];
@@ -236,7 +246,8 @@ public class CPU implements Runnable {
                         temporary_Dst_reg, registers[temporary_Dst_reg]));
                 break;
             }
-            case 7: //MUL
+            // Inst: MULTIPLY Type: Compute Only
+            case 7: //07 MUL
             {
                 registers[temporary_Dst_reg]=registers[temporary_sreg1]*registers[temporary_sreg2];
                 System.out.println(String.format("MUL - multiplies from R%s val:%s with R%s val:%s to R%s val%s",
@@ -244,7 +255,8 @@ public class CPU implements Runnable {
                         temporary_Dst_reg, registers[temporary_Dst_reg]));
                 break;
             }
-            case 8: //DIV
+            // Inst: DIVIDE Type: Compute Only
+            case 8: //08 DIV
             {
                 registers[temporary_Dst_reg]=registers[temporary_sreg1]/registers[temporary_sreg2];
                 System.out.println(String.format("DIV - divides from R%s val:%s with R%s val:%s to R%s val%s",
@@ -252,7 +264,8 @@ public class CPU implements Runnable {
                         temporary_Dst_reg, registers[temporary_Dst_reg]));
                 break;
             }
-            case 9: //AND
+            // Inst: LOGICAL AND Type: Compute Only
+            case 9: //09 AND
             {
                 registers[temporary_Dst_reg]= registers[temporary_sreg1]&registers[temporary_sreg2];
                 System.out.println(String.format("AND - logical AND of R%s val:%s and R%s val:%s to R%s val%s",
@@ -260,6 +273,7 @@ public class CPU implements Runnable {
                         temporary_Dst_reg, registers[temporary_Dst_reg]));
                 break;
             }
+            // Inst: LOGICAL OR Type: Compute Only
             case 10:    //0A OR
             {
                 registers[temporary_Dst_reg]=registers[temporary_sreg1]^registers[temporary_sreg2];
@@ -268,6 +282,7 @@ public class CPU implements Runnable {
                         temporary_Dst_reg, registers[temporary_Dst_reg]));
                 break;
             }
+            // Inst: MOVE DIRECTLY TO REGISTER Type: Compute Only
             case 11:    //0B MOVI
             {
                 registers[temporary_Dst_reg]= temporary_address;
@@ -275,6 +290,7 @@ public class CPU implements Runnable {
                         temporary_address, temporary_Dst_reg));
                 break;
             }
+            // Inst: ADD TO REGISTER Type: Compute Only
             case 12:    //0C ADDI
             {
                 registers[temporary_Dst_reg]+=temporary_address;
@@ -282,6 +298,7 @@ public class CPU implements Runnable {
                         temporary_address, temporary_Dst_reg, registers[temporary_Dst_reg]));
                 break;
             }
+            // Inst: MULTIPLY DIRECTLY TO REGISTER Type: Compute Only
             case 13:    //0D MULI
             {
                 registers[temporary_Dst_reg]*=temporary_address;
@@ -289,6 +306,7 @@ public class CPU implements Runnable {
                         temporary_address, temporary_Dst_reg, registers[temporary_Dst_reg]));
                 break;
             }
+            // Inst: DIVIDE DIRECTLY TO REGISTER Type: Compute Only
             case 14:    //0E DIVI
             {
                 registers[temporary_Dst_reg]/=temporary_address;
@@ -296,6 +314,7 @@ public class CPU implements Runnable {
                         temporary_address, temporary_Dst_reg, registers[temporary_Dst_reg]));
                 break;
             }
+            // Inst: LOADS DIRECTLY TO REGISTER Type: Compute Only
             case 15:    //0F LDI
             {
                 registers[temporary_Dst_reg] = (temporary_address);
@@ -303,6 +322,7 @@ public class CPU implements Runnable {
                         temporary_address, temporary_Dst_reg));
                 break;
             }
+            // Inst: SET D-REG Type: Compute Only
             case 16:    //10 SLT
             {
                 if(registers[temporary_sreg1] < registers[temporary_sreg2]){
@@ -319,6 +339,7 @@ public class CPU implements Runnable {
                 }
                 break;
             }
+            // Inst: SET D-REG Type: Compute Only
             case 17: //11 SLTI
             {
                 if(registers[temporary_sreg1] < (temporary_address/4)){
@@ -336,6 +357,7 @@ public class CPU implements Runnable {
                 }
                 break;
             }
+            // Inst: LOGICAL END Type: Compute Only
             case 18:    //12 HLT
             {
                 programCounter = instructCounter;
@@ -343,18 +365,21 @@ public class CPU implements Runnable {
                         programCounter));
                 break;
             }
+            // Inst: DOES NOTHING, MOVES TO NEXT INSTRUCTION Type: Compute Only
             case 19:    //13 NOP
             {
                 //does nothing
                 System.out.println("NOP - Does nothing and moves to next instruction");
                 break;
             }
+            // Inst: JUMP Type: Compute Only
             case 20:    //14 JMP
             {
                 programCounter = temporary_address/4;
                 System.out.println(String.format("JMP - Jump to %s", temporary_address/4));
                 break;
             }
+            // Inst: BRANCHES TO ADDRESS Type: Compute Only
             case 21:    //15 BEQ
             {
                 if(registers[temporary_breg] == registers[temporary_Dst_reg]){
@@ -370,6 +395,7 @@ public class CPU implements Runnable {
                 }
                 break;
             }
+            // Inst: BRANCHES TO ADDRESS Type: Compute Only
             case 22: //16 BNE
             {
                 if(registers[temporary_breg] != registers[temporary_Dst_reg]){
@@ -387,6 +413,7 @@ public class CPU implements Runnable {
                 }
                 break;
             }
+            // Inst: BRANCHES TO ADDRESS Type: Compute Only
             case 23: //17 BEZ
             {
                 if(registers[temporary_breg] == 0){
@@ -401,6 +428,7 @@ public class CPU implements Runnable {
                 }
                 break;
             }
+            // Inst: BRANCHES TO ADDRESS Type: Compute Only
             case 24: //18 BNZ
             {
                 if(registers[temporary_breg] != 0){
@@ -415,6 +443,7 @@ public class CPU implements Runnable {
                 }
                 break;
             }
+            // Inst: BRANCHES TO ADDRESS Type: Compute Only
             case 25:    //19 BGZ
             {
                 if(registers[temporary_breg] > 0){
@@ -429,6 +458,7 @@ public class CPU implements Runnable {
                 }
                 break;
             }
+            // Inst: BRANCHES TO ADDRESS Type: Compute Only
             case 26:    //1A BLZ
             {
                 if (registers[temporary_breg] < 0) {
